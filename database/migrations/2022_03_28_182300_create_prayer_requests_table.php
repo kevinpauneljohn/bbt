@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('member_id');
             $table->text('request');
             $table->string('status');
+            $table->string('visibility');
             $table->date('date_completed')->nullable();
             $table->timestamps();
             $table->softDeletes();
