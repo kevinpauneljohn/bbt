@@ -247,10 +247,28 @@ return [
             'icon' => 'fas fa-tachometer-alt',
         ],
         [
+            'text' => 'Users',
+            'route'  => 'roles.index',
+            'icon' => 'fas fa-users',
+            'can' => 'view role'
+        ],
+        [
+            'text' => 'Churches',
+            'route'  => 'churches.index',
+            'icon' => 'fas fa-home',
+            'can' => 'view church'
+        ],
+        [
             'text' => 'Prayer Requests',
-            'route'  => 'prayer-requests.index',
             'icon' => 'fas fa-pray',
-            'can' => 'view prayer request'
+            'submenu' => [
+                [
+                    'text'       => 'Add Personal Prayer',
+                    'icon_color' => 'red',
+                    'route'        => 'prayer-requests.index',
+                    'can' => 'view prayer request',
+                ],
+            ],
         ],
         [
             'header' => 'Roles & Permissions'
@@ -259,11 +277,13 @@ return [
             'text' => 'Roles',
             'route'  => 'roles.index',
             'icon' => 'fas fa-user',
+            'can' => 'view role'
         ],
         [
             'text' => 'Permissions',
             'route'  => 'permissions.index',
             'icon' => 'fas fa-lock',
+            'can' => 'view permission'
         ],
     ],
 

@@ -20,20 +20,18 @@
     <div class="container-fluid">
         <div class="card card-default">
             <div class="card-header">
-{{--                @can('add customer')--}}
-                    <button class="btn btn-primary btn-sm add-user-btn" data-toggle="modal">Add</button>
-{{--                @endcan--}}
+                @can('add prayer request')
+                    <button class="btn btn-primary btn-sm add-prayer-btn" data-toggle="modal" data-target="#add-prayer-request">Add</button>
+                @endcan
             </div>
             <div class="card-body">
                 <table id="prayer-requests" class="table table-hover table-bordered" role="grid">
                     <thead>
                     <tr role="row">
-                        <th>Date</th>
+                        <th width="15%">Date Requested</th>
                         <th>Full Name</th>
-                        <th>Email</th>
-                        <th>Mobile Number</th>
-                        <th>Facebook</th>
-                        <th>Created By</th>
+                        <th>Prayer Request</th>
+                        <th width="10%">Category</th>
                         <th>Action</th>
                     </tr>
                     </thead>
@@ -41,6 +39,37 @@
             </div>
         </div>
     </div>
+
+    @can('add prayer request')
+        <div class="modal fade permission-modal" id="add-prayer-request">
+            <div class="modal-dialog">
+                <form id="add-prayer-request-form" class="form-submit">
+                    @csrf
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Add Prayer Request</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group permission">
+                                <label for="permission">Permission</label><span class="required">*</span>
+                                <input name="permission" class="form-control" id="permission">
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary save">Save</button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </form>
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+    @endcan
 @stop
 @section('plugins.Datatables', true)
 @section('plugins.Select2', true)

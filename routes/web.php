@@ -28,4 +28,7 @@ Route::group(['middleware' => ['auth']],function (){
 
     Route::resource('permissions',\App\Http\Controllers\RolesPermission\PermissionController::class);
     Route::get('/all-permissions',[\App\Http\Controllers\RolesPermission\PermissionController::class,'allPermissions'])->name('all-permissions');
+
+    Route::resource('churches',\App\Http\Controllers\Church\ChurchController::class);
+    Route::get('/all-churches',[\App\Http\Controllers\Church\ChurchController::class,'allChurches'])->name('all-churches');
 });
