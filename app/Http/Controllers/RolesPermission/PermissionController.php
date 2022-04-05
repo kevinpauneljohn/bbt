@@ -3,18 +3,24 @@
 namespace App\Http\Controllers\RolesPermission;
 
 use App\Http\Controllers\Controller;
+use App\Services\PermissionService;
+use App\Services\RolesUpdateChecker;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class PermissionController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function index()
     {
-        return view('dashboard.Permissions.index');
+        $roles = Role::where('name','!=','super admin')->get();
+        return view('dashboard.Permissions.index',compact('roles'));
     }
 
     /**
@@ -31,11 +37,24 @@ class PermissionController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
-        //
+        $validation = Validator::make($request->all(),[
+            'permission' => 'required|unique:permissions,name',
+        ]);
+
+        if($validation->passes())
+        {
+            $permission = Permission::create(['name' => $request->permission]);
+            if(!empty($request->roles))
+            {
+                $permission->syncRoles($request->roles);
+            }
+            return response()->json(['success' => true, 'message' => 'permission successfully added']);
+        }
+        return response()->json($validation->errors());
     }
 
     /**
@@ -46,7 +65,7 @@ class PermissionController extends Controller
      */
     public function show($id)
     {
-        //
+        return collect(Permission::findById($id)->roles()->get())->pluck('name');
     }
 
     /**
@@ -65,21 +84,64 @@ class PermissionController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, RolesUpdateChecker $rolesUpdateChecker)
     {
-        //
+        $change = 0;
+        $nameChange = false;
+        $validation = Validator::make($request->all(),[
+            'permission' => 'required',
+        ]);
+
+        if($validation->passes())
+        {
+            //save the permission first
+            $permission = Permission::findById($id);
+            $permission->name = $request->permission;
+            if($permission->isDirty('name'))
+            {
+                $nameChange = true;
+                $permission->save();
+            }
+
+
+
+            //remove roles before updating
+            $roles = Permission::findById($id)->roles->pluck('name');
+
+            $change =$rolesUpdateChecker->rolesUpdateChecker($request->roles,$roles);
+
+
+
+            if($nameChange === true || $change > 0){
+                foreach ($roles as $role){
+
+                    $permission->removeRole($role);
+                }
+                //assign to permission the newly selected roles
+                $permission->assignRole($request->roles);
+                return response()->json(['success' => true, 'message' => 'permission successfully updated', 'change' => $change]);
+            }
+            return response()->json(['success' => false, 'message' => 'No changes occurred', 'change' => $change]);
+        }
+        return response()->json($validation->errors());
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
     {
-        //
+        if(Permission::destroy($id))
+            return response()->json(['success' => true, 'message' => 'permission successfully updated']);
+    }
+
+    public function allPermissions(PermissionService $permissionService)
+    {
+        return $permissionService->permissions();
     }
 }

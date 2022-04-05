@@ -242,11 +242,6 @@ return [
             'text' => 'search',
         ],
         [
-            'text' => 'blog',
-            'url'  => 'admin/blog',
-            'can'  => 'manage-blog',
-        ],
-        [
             'text' => 'Dashboard',
             'route'  => 'home',
             'icon' => 'fas fa-tachometer-alt',
@@ -255,6 +250,7 @@ return [
             'text' => 'Prayer Requests',
             'route'  => 'prayer-requests.index',
             'icon' => 'fas fa-pray',
+            'can' => 'view prayer request'
         ],
         [
             'header' => 'Roles & Permissions'

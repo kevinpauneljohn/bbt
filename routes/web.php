@@ -27,4 +27,5 @@ Route::group(['middleware' => ['auth']],function (){
     Route::get('/all-roles',[\App\Http\Controllers\RolesPermission\RolesController::class,'role_lists'])->name('all-roles');
 
     Route::resource('permissions',\App\Http\Controllers\RolesPermission\PermissionController::class);
+    Route::get('/all-permissions',[\App\Http\Controllers\RolesPermission\PermissionController::class,'allPermissions'])->name('all-permissions');
 });
