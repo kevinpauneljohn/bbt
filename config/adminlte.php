@@ -264,6 +264,11 @@ return [
             'route'  => 'roles.index',
             'icon' => 'fas fa-user',
         ],
+        [
+            'text' => 'Permissions',
+            'route'  => 'permissions.index',
+            'icon' => 'fas fa-lock',
+        ],
     ],
 
     /*

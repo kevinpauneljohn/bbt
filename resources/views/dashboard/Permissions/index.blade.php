@@ -1,16 +1,16 @@
 @extends('adminlte::page')
 
-@section('title', 'Roles')
+@section('title', 'Permissions')
 
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Roles</h1>
+            <h1 class="m-0 text-dark">Permissions</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="{{route('home')}}">Home</a></li>
-                <li class="breadcrumb-item active">Roles</li>
+                <li class="breadcrumb-item active">Permissions</li>
             </ol>
         </div><!-- /.col -->
     </div>
@@ -41,25 +41,25 @@
         <div class="modal-dialog">
             <form id="add-role-form">
                 @csrf
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Add Role</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group name">
-                        <label for="name">Name</label>
-                        <input name="name" class="form-control" id="name">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Add Role</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group name">
+                            <label for="name">Name</label>
+                            <input name="name" class="form-control" id="name">
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary save">Save</button>
                     </div>
                 </div>
-                <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary save">Save</button>
-                </div>
-            </div>
-            <!-- /.modal-content -->
+                <!-- /.modal-content -->
             </form>
         </div>
         <!-- /.modal-dialog -->
@@ -203,7 +203,7 @@
         });
 
         $(document).on('click','.delete-role-btn',function(){
-           let id = this.id;
+            let id = this.id;
 
             Swal.fire({
                 title: 'Are you sure?',
