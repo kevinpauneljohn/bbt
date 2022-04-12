@@ -248,9 +248,9 @@ return [
         ],
         [
             'text' => 'Users',
-            'route'  => 'roles.index',
+            'route'  => 'users.index',
             'icon' => 'fas fa-users',
-            'can' => 'view role'
+            'can' => 'view user'
         ],
         [
             'text' => 'Churches',
