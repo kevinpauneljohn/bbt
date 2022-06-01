@@ -88,6 +88,14 @@
                             </div>
                             <div class="row">
                                 <div class="col-lg-6">
+                                    <div class="form-group mobile_number">
+                                        <label for="mobile_number">Mobile Number</label><span class="required">*</span>
+                                        <input type="text" name="mobile_number" class="form-control" id="mobile_number">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6">
                                     <div class="form-group password">
                                         <label for="password">Password</label><span class="required">*</span>
                                         <input type="password" name="password" class="form-control" id="password">
@@ -103,7 +111,7 @@
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="form-group roles">
-                                        <label for="roles">Roles</label> (Optional)
+                                        <label for="roles">Roles</label><span class="required">*</span>
                                         <select name="roles[]" class="form-control select2" id="roles" multiple="multiple" style="width: 100%;">
                                             @foreach($roles as $role)
                                                 <option name="{{$role->name}}">{{$role->name}}</option>
@@ -115,11 +123,11 @@
                             <div class="row">
                                 <div class="col-lg-12">
                                     <div class="form-group church">
-                                        <label for="church">Church</label> (Optional)
-                                        <select name="church" class="form-control select2" id="church" style="width: 100%;">
+                                        <label for="church">Church</label><span class="required">*</span>
+                                        <select name="church" class="form-control " id="church" style="width: 100%;">
                                             <option value=""> -- Select a church-- </option>
                                             @foreach($churches as $church)
-                                                <option name="{{$church->name}}">{{$church->name}}</option>
+                                                <option value="{{$church->id}}">{{$church->name}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -185,6 +193,7 @@
             popUp.find('.form-submit').removeAttr('id').attr('id','add-user-form');
         });
 
+        @can('add user')
         $(document).on('submit','#add-user-form',function(form){
             form.preventDefault();
             let data = $(this).serializeArray();
@@ -200,7 +209,8 @@
                     errorDisplay(response);
                     if(response.success === true)
                     {
-                        popUp.trigger('reset');
+                        $('#add-user-form').trigger('reset');
+                        $('#add-user-form').find('.select2').val('').trigger('change');
 
                         let table = $('#users').DataTable();
                         table.ajax.reload(null, false);
@@ -217,8 +227,10 @@
                     popUp.find('.save').attr('disabled',false).text('Save');
                 }
             });
-            clear_errors('name','address');
+            clear_errors('firstname','lastname','email','username','password','roles','mobile_number','church');
         });
+        @endcan
+
 
         let churchId;
         $(document).on('click','.edit-church-btn', function(){

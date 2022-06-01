@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
 use App\Models\Church;
+use App\Models\Member;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Role;
@@ -49,13 +51,17 @@ class UserController extends Controller
             'lastname' => 'required',
             'email' => 'required|email|unique:users,email',
             'username' => 'required|unique:users,username',
+            'mobile_number' => 'required|unique:users,mobile_number',
             'password' => 'required|confirmed',
-            'roles' => 'required'
+            'roles' => 'required',
+            'church' => 'required'
         ]);
 
         if($validation->passes())
         {
-
+            $user = User::create($request->except(['roles']))->assignRole($request->roles);
+            $this->add_member_to_church($request->church, $user->id);
+            return response()->json(['success' => true, 'message' => 'User successfully added!']);
         }
         return response()->json($validation->errors());
     }
@@ -103,5 +109,20 @@ class UserController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+    /**
+     * create a membership id to s specific church
+     * @param $church_id
+     * @param $user_id
+     * @return mixed
+     */
+    public function add_member_to_church($church_id, $user_id)
+    {
+        return Member::create([
+            'church_id' => $church_id,
+            'user_id' => $user_id
+        ]);
     }
 }
