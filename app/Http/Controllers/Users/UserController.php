@@ -60,8 +60,7 @@ class UserController extends Controller
 
         if($validation->passes())
         {
-            $user = User::create($request->except(['roles']))->assignRole($request->roles);
-            $this->add_member_to_church($request->church, $user->id);
+            User::create($request->except(['roles']))->assignRole($request->roles);
             return response()->json(['success' => true, 'message' => 'User successfully added!']);
         }
         return response()->json($validation->errors());
@@ -112,22 +111,11 @@ class UserController extends Controller
         //
     }
 
-
     /**
-     * create a membership id to s specific church
-     * @param $church_id
-     * @param $user_id
+     * @param UserService $userService
      * @return mixed
      */
-    public function add_member_to_church($church_id, $user_id)
-    {
-        return Member::create([
-            'church_id' => $church_id,
-            'user_id' => $user_id
-        ]);
-    }
-
-    public function all_users(UserService $userService)
+    public function all_users(UserService $userService): mixed
     {
         return $userService->users();
     }

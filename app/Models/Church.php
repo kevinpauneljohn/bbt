@@ -14,4 +14,9 @@ class Church extends Model
         'name',
         'address'
     ];
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
 }

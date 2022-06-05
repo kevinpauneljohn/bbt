@@ -15,7 +15,7 @@ class UserService
                 return $user->created_at->format('M d, Y');
             })
             ->addColumn('church',function($user){
-                return '';
+                return $user->churches !== null ? $user->churches->name : '';
             })
             ->addColumn('fullName',function($user){
                 return $user->full_name;

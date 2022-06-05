@@ -30,6 +30,7 @@ class User extends Authenticatable
         'mobile_number',
         'date_of_birth',
         'password',
+        'church',
     ];
 
     /**
@@ -85,5 +86,10 @@ class User extends Authenticatable
     public function adminlte_profile_url()
     {
         return 'profile/username';
+    }
+
+    public function churches()
+    {
+        return $this->belongsTo(Church::class, 'church');
     }
 }

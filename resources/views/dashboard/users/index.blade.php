@@ -176,7 +176,7 @@
                 ajax: '/all-users',
                 columns: [
                     { data: 'created_at', name: 'created_at'},
-                    { data: 'firstname', name: 'firstname'},
+                    { data: 'church', name: 'church'},
                     { data: 'fullName', name: 'fullName'},
                     { data: 'username', name: 'username'},
                     { data: 'email', name: 'email'},
