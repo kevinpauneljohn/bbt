@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Church;
+use App\Models\Member;
 use Yajra\DataTables\Facades\DataTables;
 
 class ChurchService
@@ -27,5 +28,14 @@ class ChurchService
             })
             ->rawColumns(['action'])
             ->make(true);
+    }
+
+    /**
+     * @param $userId
+     * @return mixed
+     */
+    public function church_member($userId): mixed
+    {
+        return collect(Member::where('user_id',$userId)->first())->toArray();
     }
 }

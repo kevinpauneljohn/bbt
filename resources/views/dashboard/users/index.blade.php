@@ -30,7 +30,9 @@
                     <tr role="row">
                         <th width="15%">Date Added</th>
                         <th>Church Name</th>
-                        <th>Address</th>
+                        <th>Full name</th>
+                        <th>Username</th>
+                        <th>Email</th>
                         <th>Action</th>
                     </tr>
                     </thead>
@@ -168,14 +170,16 @@
         $(function() {
 
 
-            $('#churches').DataTable({
+            $('#users').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '/all-churches',
+                ajax: '/all-users',
                 columns: [
                     { data: 'created_at', name: 'created_at'},
-                    { data: 'name', name: 'name'},
-                    { data: 'address', name: 'address'},
+                    { data: 'firstname', name: 'firstname'},
+                    { data: 'fullName', name: 'fullName'},
+                    { data: 'username', name: 'username'},
+                    { data: 'email', name: 'email'},
                     { data: 'action', name: 'action', orderable: false, searchable: false}
                 ],
                 responsive:true,

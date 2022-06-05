@@ -24,6 +24,7 @@ return new class extends Migration
             $table->date('date_of_birth')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->unsignedBigInteger('church_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

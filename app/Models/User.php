@@ -61,6 +61,16 @@ class User extends Authenticatable
         );
     }
 
+    /**
+     * @return Attribute
+     */
+    public function fullName(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => "{$this->firstname} {$this->lastname}",
+        );
+    }
+
     public function adminlte_image()
     {
         return 'https://picsum.photos/300/300';

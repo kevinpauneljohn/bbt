@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Church;
 use App\Models\Member;
 use App\Models\User;
+use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Role;
@@ -14,7 +15,7 @@ class UserController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('permission:view user')->only(['index','show']);
+        $this->middleware('permission:view user')->only(['index','show','all_users']);
     }
     /**
      * Display a listing of the resource.
@@ -124,5 +125,10 @@ class UserController extends Controller
             'church_id' => $church_id,
             'user_id' => $user_id
         ]);
+    }
+
+    public function all_users(UserService $userService)
+    {
+        return $userService->users();
     }
 }

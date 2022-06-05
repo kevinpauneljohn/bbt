@@ -23,6 +23,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::group(['middleware' => ['auth']],function (){
     Route::resource('users',\App\Http\Controllers\Users\UserController::class);
+    Route::get('/all-users',[\App\Http\Controllers\Users\UserController::class,'all_users'])->name('all-users');
 
     Route::resource('prayer-requests',\App\Http\Controllers\Prayer\PrayerRequestController::class);
     Route::resource('roles',\App\Http\Controllers\RolesPermission\RolesController::class);
