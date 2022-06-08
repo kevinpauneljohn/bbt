@@ -24,11 +24,11 @@ class UserService
                 $action = '';
                 if(auth()->user()->can('edit user'))
                 {
-                    $action .= '<a href="#" class="btn btn-xs btn-primary edit-permission-btn" id="'.$user->id.'" data-toggle="modal" data-target="#edit-permission-modal" title="Edit"><i class="fa fa-edit"></i></a> ';
+                    $action .= '<a href="#" class="btn btn-xs btn-primary edit-user-btn" id="'.$user->id.'" data-toggle="modal" data-target="#edit-user-modal" title="Edit"><i class="fa fa-edit"></i></a> ';
                 }
                 if(auth()->user()->can('delete user'))
                 {
-                    $action .= '<a class="btn btn-xs btn-danger delete-permission-btn" id="'.$user->id.'" title="Delete"><i class="fa fa-trash"></i></a>';
+                    $action .= '<a class="btn btn-xs btn-danger delete-user-btn" id="'.$user->id.'" title="Delete"><i class="fa fa-trash"></i></a>';
                 }
                 return $action;
             })

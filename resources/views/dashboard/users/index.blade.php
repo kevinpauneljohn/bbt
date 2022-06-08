@@ -88,7 +88,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row mobile-section">
                                 <div class="col-lg-6">
                                     <div class="form-group mobile_number">
                                         <label for="mobile_number">Mobile Number</label><span class="required">*</span>
@@ -96,7 +96,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row password-section">
                                 <div class="col-lg-6">
                                     <div class="form-group password">
                                         <label for="password">Password</label><span class="required">*</span>
@@ -191,6 +191,7 @@
         let popUp = $('.user-modal');
 
         $(document).on('click','.add-user-btn',function(){
+            popUp.find('.password-section').removeAttr('style');
 
             popUp.find('.form-submit').trigger('reset');
             popUp.find('.modal-title').text('Add User');
@@ -236,24 +237,49 @@
         @endcan
 
 
-        let churchId;
-        $(document).on('click','.edit-church-btn', function(){
-            permissionId = this.id;
+        @can('edit user')
+        let userId;
+        $(document).on('click','.edit-user-btn', function(){
+            userId = this.id;
 
-            $tr = $(this).closest('tr');
+            $.ajax({
+                url:'/users/'+userId,
+                type: 'GET',
+                beforeSend: function(){
 
-            let data = $tr.children("td").map(function () {
-                return $(this).text();
-            }).get();
+                },success: function(response){
+                    console.log(response);
+
+                    popUp.find('.password-section').css('display','none');
+                    popUp.find('.form-submit #firstname').val(response.user.firstname);
+                    popUp.find('.form-submit #middlename').val(response.user.middlename);
+                    popUp.find('.form-submit #lastname').val(response.user.lastname);
+                    popUp.find('.form-submit #email').val(response.user.email);
+                    popUp.find('.form-submit #username').val(response.user.username);
+                    popUp.find('.form-submit #mobile_number').val(response.user.mobile_number);
+
+                    popUp.find('#roles').val(response.roles).trigger('change');
+                    popUp.find('#church').val(response.user.church).trigger('change');
+                },error: function(xhr, status, error){
+
+                }
+            });
+
+            // $tr = $(this).closest('tr');
+            //
+            // let data = $tr.children("td").map(function () {
+            //     return $(this).text();
+            // }).get();
 
             popUp.find('.text-danger').remove();
-            popUp.find('.modal-title').text('Edit Church');
+            popUp.find('.modal-title').text('Edit User');
             popUp.find('.form-submit').removeAttr('id').attr('id','edit-church-form');
-            popUp.find('.form-submit #name').val(data[1]);
-            popUp.find('.form-submit #address').val(data[2]);
+
             popUp.modal('toggle');
 
         });
+        @endcan
+
 
         $(function (){
             $('.select2').select2();
