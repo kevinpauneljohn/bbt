@@ -10,7 +10,7 @@ class UserService
 
     public function users()
     {
-        return DataTables::of(User::all())
+        return DataTables::of(User::whereHas("roles", function($q){ $q->where("name","!=", "super admin"); })->get())
             ->editColumn('created_at',function($user){
                 return $user->created_at->format('M d, Y');
             })

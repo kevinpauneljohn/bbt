@@ -263,7 +263,7 @@ return [
             'icon' => 'fas fa-pray',
             'submenu' => [
                 [
-                    'text'       => 'Add Personal Prayer',
+                    'text'       => 'Add Prayer Request',
                     'icon_color' => 'red',
                     'route'        => 'prayer-requests.index',
                     'can' => 'view prayer request',
@@ -271,7 +271,8 @@ return [
             ],
         ],
         [
-            'header' => 'Roles & Permissions'
+            'header' => 'Roles & Permissions',
+            'can' => 'view role'
         ],
         [
             'text' => 'Roles',

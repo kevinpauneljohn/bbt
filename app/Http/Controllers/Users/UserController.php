@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Church;
 use App\Models\Member;
 use App\Models\User;
+use App\Services\RolesUpdateChecker;
 use App\Services\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -97,11 +98,48 @@ class UserController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id, RolesUpdateChecker $rolesUpdateChecker)
     {
-        //
+        $validation = Validator::make($request->all(),[
+            'firstname' => 'required',
+            'lastname' => 'required',
+            'email' => 'required|email',
+            'mobile_number' => 'required',
+            'roles' => 'required',
+            'church' => 'required'
+        ]);
+
+        if($validation->passes())
+        {
+            $userChange = false;
+            $user = User::find($id);
+            $user->firstname = $request->firstname;
+            $user->middlename = $request->middlename;
+            $user->lastname = $request->lastname;
+            $user->email = $request->email;
+            $user->mobile_number = $request->mobile_number;
+
+            if($user->isDirty())
+            {
+                $userChange = true;
+                $user->save();
+            }
+            $roles = $user->getRoleNames();
+            $change = $rolesUpdateChecker->rolesUpdateChecker($request->roles, $roles);
+            if($userChange === true || $change > 0){
+                foreach ($roles as $role){
+
+                    $user->removeRole($role);
+                }
+                //assign to user the newly selected roles
+                $user->assignRole($request->roles);
+                return response()->json(['success' => true, 'message' => 'User successfully updated', 'change' => $change]);
+            }
+            return response()->json(['success' => false, 'message' => 'no changes occurred', 'change' => $change]);
+        }
+        return response()->json($validation->errors());
     }
 
     /**

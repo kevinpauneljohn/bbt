@@ -81,7 +81,7 @@
                                         <input type="email" name="email" class="form-control" id="email">
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
+                                <div class="col-lg-6 username-section">
                                     <div class="form-group username">
                                         <label for="username">Username</label><span class="required">*</span>
                                         <input type="text" name="username" class="form-control" id="username">
@@ -192,6 +192,7 @@
 
         $(document).on('click','.add-user-btn',function(){
             popUp.find('.password-section').removeAttr('style');
+            popUp.find('.form-submit #username').attr('disabled',false);
 
             popUp.find('.form-submit').trigger('reset');
             popUp.find('.modal-title').text('Add User');
@@ -248,14 +249,12 @@
                 beforeSend: function(){
 
                 },success: function(response){
-                    console.log(response);
-
                     popUp.find('.password-section').css('display','none');
                     popUp.find('.form-submit #firstname').val(response.user.firstname);
                     popUp.find('.form-submit #middlename').val(response.user.middlename);
                     popUp.find('.form-submit #lastname').val(response.user.lastname);
                     popUp.find('.form-submit #email').val(response.user.email);
-                    popUp.find('.form-submit #username').val(response.user.username);
+                    popUp.find('.form-submit #username').val(response.user.username).attr('disabled',true);
                     popUp.find('.form-submit #mobile_number').val(response.user.mobile_number);
 
                     popUp.find('#roles').val(response.roles).trigger('change');
@@ -265,18 +264,51 @@
                 }
             });
 
-            // $tr = $(this).closest('tr');
-            //
-            // let data = $tr.children("td").map(function () {
-            //     return $(this).text();
-            // }).get();
-
             popUp.find('.text-danger').remove();
             popUp.find('.modal-title').text('Edit User');
-            popUp.find('.form-submit').removeAttr('id').attr('id','edit-church-form');
+            popUp.find('.form-submit').removeAttr('id').attr('id','edit-user-form');
 
             popUp.modal('toggle');
 
+        });
+
+        $(document).on('submit','#edit-user-form',function(form){
+            form.preventDefault();
+
+            let data = $(this).serializeArray();
+
+            $.ajax({
+                url: '/users/'+userId,
+                type: 'PUT',
+                data: data,
+                beforeSend: function(){
+                    popUp.find('input, select').attr('disabled',true);
+                    popUp.find('.save').attr('disabled',true).text('Saving...');
+                },success: function(response){
+
+                    errorDisplay(response);
+                    if(response.success === true)
+                    {
+                        let table = $('#users').DataTable();
+                        table.ajax.reload(null, false);
+                        Toast.fire({
+                            type: 'success',
+                            title: response.message
+                        })
+                    }else if(response.success === false){
+                        Toast.fire({
+                            type: 'warning',
+                            title: response.message
+                        })
+                    }
+
+                    popUp.find('input:not("#username"), select').attr('disabled',false);
+                    popUp.find('.save').attr('disabled',false).text('Save');
+                },error: function(xhr, status, error){
+                    console.log(xhr);
+                }
+            });
+            clear_errors('firstname','lastname','email','username','password','roles','mobile_number','church');
         });
         @endcan
 
