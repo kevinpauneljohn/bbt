@@ -92,4 +92,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Church::class, 'church');
     }
+
+    public function prayerRequests(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(PrayerRequest::class);
+    }
 }

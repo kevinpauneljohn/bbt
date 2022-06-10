@@ -3,10 +3,17 @@
 namespace App\Http\Controllers\Prayer;
 
 use App\Http\Controllers\Controller;
+use App\Models\PrayerRequest;
+use App\Services\PrayerRequestService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class PrayerRequestController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:add prayer request')->only([]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -31,11 +38,28 @@ class PrayerRequestController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
-        //
+        $validation = Validator::make($request->all(),[
+            'request' => 'required|max:1000',
+            'visibility' => 'required',
+        ]);
+
+        if($validation->passes())
+        {
+            $prayerRequest = collect(collect($request->all())
+                ->merge([
+                    'user_id' => auth()->user()->id,
+                    'status' => 'waiting',
+                    'recurring' => isset($request->recurring),
+                    ]))->toArray();
+            if(PrayerRequest::create($prayerRequest)){
+                return response()->json(['message' => 'Prayer Request Successfully added!', 'success' => true]);
+            }
+        }
+        return response()->json($validation->errors());
     }
 
     /**
@@ -46,7 +70,7 @@ class PrayerRequestController extends Controller
      */
     public function show($id)
     {
-        //
+        return PrayerRequest::find($id);
     }
 
     /**
@@ -65,21 +89,54 @@ class PrayerRequestController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, $id)
     {
-        //
+        $validation = Validator::make($request->all(),[
+            'request' => 'required|max:1000',
+            'visibility' => 'required',
+        ]);
+
+        if($validation->passes())
+        {
+            $prayerRequest = PrayerRequest::find($id);
+            $prayerRequest->request = $request->input('request');
+            $prayerRequest->visibility = $request->visibility;
+            $prayerRequest->target_completion = $request->target_completion;
+            $prayerRequest->recurring =  isset($request->recurring);
+            if($prayerRequest->isDirty())
+            {
+                $prayerRequest->save();
+                return response()->json(['success' => true, 'message' => 'Prayer request successfully updated!']);
+            }
+            return response()->json(['success' => false, 'message' => 'No changes occurred']);
+        }
+        return response()->json($validation->errors());
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
     {
-        //
+        if(PrayerRequest::destroy($id))
+        {
+            return response()->json(['success' => true, 'message' => 'Prayer request successfully removed!']);
+        }
+        return response()->json(['success' => false, 'message' => 'An error occurred!']);
+    }
+
+    /**
+     * get all the prayer request of the specfici user
+     * @param PrayerRequestService $prayerRequestService
+     * @return mixed
+     */
+    public function getPersonalPrayer(PrayerRequestService $prayerRequestService)
+    {
+        return $prayerRequestService->personalPrayer(auth()->user()->id);
     }
 }

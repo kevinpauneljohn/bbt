@@ -15,15 +15,17 @@ return new class extends Migration
     {
         Schema::create('prayer_requests', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('member_id');
+            $table->uuid('user_id');
             $table->text('request');
             $table->string('status');
             $table->string('visibility');
             $table->date('date_completed')->nullable();
+            $table->date('target_completion')->nullable();
+            $table->boolean('recurring');
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('member_id')->references('id')->on('members');
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
