@@ -130,6 +130,11 @@ class PrayerRequestController extends Controller
         return response()->json(['success' => false, 'message' => 'An error occurred!']);
     }
 
+    public function personalPrayer(): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Contracts\Foundation\Application
+    {
+        return view('dashboard.prayer.personalprayer');
+    }
+
     /**
      * get all the prayer request of the specfici user
      * @param PrayerRequestService $prayerRequestService

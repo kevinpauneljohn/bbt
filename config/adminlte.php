@@ -263,9 +263,15 @@ return [
             'icon' => 'fas fa-pray',
             'submenu' => [
                 [
-                    'text'       => 'Add Prayer Request',
+                    'text'       => 'All Prayer Request',
                     'icon_color' => 'red',
                     'route'        => 'prayer-requests.index',
+                    'can' => 'view prayer request',
+                ],
+                [
+                    'text'       => 'Personal Prayer Request',
+                    'icon_color' => 'red',
+                    'route'        => 'my.personal.prayer',
                     'can' => 'view prayer request',
                 ],
             ],

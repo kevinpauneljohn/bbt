@@ -1,11 +1,11 @@
 @extends('adminlte::page')
 
-@section('title', 'All Prayer Requests')
+@section('title', 'My Personal Prayer Requests')
 
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
-            <h1 class="m-0 text-dark">All Prayer Requests</h1>
+            <h1 class="m-0 text-dark">My Personal Prayer Requests</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -261,8 +261,8 @@
         @endcan
 
         @can('delete prayer request')
-            $(document).on('click','.delete-prayer-request-btn',function(){
-                requestId = this.id;
+        $(document).on('click','.delete-prayer-request-btn',function(){
+            requestId = this.id;
 
             Swal.fire({
                 title: 'Are you sure?',
@@ -297,7 +297,7 @@
 
                 }
             })
-            });
+        });
         @endcan
 
     </script>
