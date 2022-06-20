@@ -55,7 +55,7 @@ class PrayerRequestService
                 $action = '';
                 if(auth()->user()->can('view prayer request'))
                 {
-                    $action .= '<button href="#" class="btn btn-xs btn-success view-prayer-request-btn" id="'.$request->id.'" title="View"><i class="fa fa-eye"></i></button> ';
+                    $action .= '<button href="#" class="btn btn-xs btn-success view-prayer-request-btn" id="'.$request->id.'" data-toggle="modal" data-target="#view-prayer-request" title="View"><i class="fa fa-eye"></i></button> ';
                 }
                 if(auth()->user()->can('edit prayer request') && $request->user_id === auth()->user()->id)
                 {

@@ -44,6 +44,59 @@
         </div>
     </div>
 
+    @can('view prayer request')
+        <div class="modal fade " id="view-prayer-request">
+            <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Prayer Request Details</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table table-bordered">
+                                <tr>
+                                    <td width="30%">Date Requested</td>
+                                    <td id="date-requested"></td>
+                                </tr>
+                                <tr>
+                                    <td>Requester</td>
+                                    <td id="requester"></td>
+                                </tr>
+                                <tr>
+                                    <td>Visibility</td>
+                                    <td id="visibility"></td>
+                                </tr>
+                                <tr>
+                                    <td>Status</td>
+                                    <td id="status"></td>
+                                </tr>
+                                <tr>
+                                    <td>Expected Date</td>
+                                    <td id="expected-date"></td>
+                                </tr>
+                                <tr>
+                                    <td>Recurring</td>
+                                    <td id="recurring"></td>
+                                </tr>
+                                <tr>
+                                    <td>Details</td>
+                                    <td id="details"></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary save">Save</button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+    @endcan
+
     @can('add prayer request')
         <div class="modal fade prayer-modal" id="add-prayer-request">
             <div class="modal-dialog">
@@ -305,6 +358,34 @@
                 }
             })
             });
+        @endcan
+
+        @can('view prayer request')
+            $(document).on('click','.view-prayer-request-btn',function(){
+                requestId = this.id;
+
+            $.ajax({
+                url: '/prayer-request-details/'+requestId,
+                type: 'GET',
+                beforeSend: function(){
+
+                },success: function(response){
+                    let viewPrayerModal = $('#view-prayer-request');
+
+                    viewPrayerModal.find('table #date-requested').text(response.date_requested);
+                    viewPrayerModal.find('table #requester').text(response.fullname);
+                    viewPrayerModal.find('table #visibility').text(response.visibility);
+                    viewPrayerModal.find('table #status').text(response.visibility);
+                    viewPrayerModal.find('table #status').text(response.status);
+                    viewPrayerModal.find('table #expected-date').text(response.expected_date);
+                    viewPrayerModal.find('table #recurring').text(response.recurring_status);
+                    viewPrayerModal.find('table #details').text(response.request);
+
+                },error: function(xhr, status, error){
+                    console.log(xhr);
+                }
+            });
+        });
         @endcan
 
     </script>

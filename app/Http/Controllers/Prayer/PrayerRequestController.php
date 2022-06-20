@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\PrayerRequest;
 use App\Models\User;
 use App\Services\PrayerRequestService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -147,11 +148,33 @@ class PrayerRequestController extends Controller
         return $prayerRequestService->Prayer(PrayerRequest::where('user_id','=',auth()->user()->id)->get());
     }
 
-    public function allPrayerRequest(PrayerRequestService $prayerRequestService)
+    /**
+     * get all church member prayer request
+     * @param PrayerRequestService $prayerRequestService
+     * @return mixed
+     */
+    public function allPrayerRequest(PrayerRequestService $prayerRequestService): mixed
     {
 
         $users = collect(User::where('church',auth()->user()->church)->get());
         $prayerRequests = PrayerRequest::whereIn('user_id',$users->pluck('id'))->get();
         return $prayerRequestService->Prayer($prayerRequests);
+    }
+
+    /**
+     * get the specific prayer request
+     * @param $id
+     * @return \Illuminate\Support\Collection
+     */
+    public function prayer_request_details($id): \Illuminate\Support\Collection
+    {
+        $prayer = PrayerRequest::find($id);
+        return collect($prayer)
+            ->merge([
+                'fullname' => $prayer->user->fullname,
+                'date_requested' => Carbon::parse($prayer->cretaed_at)->format('M d, Y'),
+                'expected_date' => Carbon::parse($prayer->target_completion)->format('M d, Y'),
+                'recurring_status' => $prayer->recurring == 1 ? 'yes' : 'no'
+                ]);
     }
 }
