@@ -157,7 +157,7 @@ class PrayerRequestController extends Controller
     {
 
         $users = collect(User::where('church',auth()->user()->church)->get());
-        $prayerRequests = PrayerRequest::whereIn('user_id',$users->pluck('id'))->get();
+        $prayerRequests = PrayerRequest::whereIn('user_id',$users->pluck('id'))->where('visibility','public')->get();
         return $prayerRequestService->Prayer($prayerRequests);
     }
 
