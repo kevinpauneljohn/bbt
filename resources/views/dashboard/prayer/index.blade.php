@@ -160,7 +160,9 @@
             display: inline-block;
         }
         .read-more{
-            font-size: 9pt;
+            font-size: 2pt;
+            color: red;
+            border: none;
         }
     </style>
 @stop

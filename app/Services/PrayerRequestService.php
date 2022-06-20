@@ -25,7 +25,7 @@ class PrayerRequestService
             })
             ->editColumn('request', function($request){
                 return strlen($request->request) > 20 ?
-                    substr($request->request,0,20).' <a href="#"><i class="read-more">Read more..</i></a>'
+                    substr($request->request,0,20).' <button style="border:none;background-color:unset;font-size:9pt;color:blue;" class="read-more view-prayer-request-btn" href="#" data-toggle="modal" data-target="#view-prayer-request" id="'.$request->id.'"><i>Read more..</i></button>'
                     : $request->request;
             })
             ->editColumn('visibility',function($request){
