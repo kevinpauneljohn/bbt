@@ -28,8 +28,9 @@
                 <table id="prayer-requests" class="table table-hover table-bordered" role="grid">
                     <thead>
                     <tr role="row">
+                        <th width="15%">Requester</th>
                         <th width="15%">Date Requested</th>
-                        <th width="30%">Prayer Request</th>
+                        <th width="40%">Prayer Request</th>
                         <th>Visibility</th>
                         <th width="10%">Expected Date Answered</th>
                         <th width="10%">Date Answered</th>
@@ -105,6 +106,9 @@
             height:initial;
             display: inline-block;
         }
+        .read-more{
+            font-size: 9pt;
+        }
     </style>
 @stop
 
@@ -124,8 +128,9 @@
             $('#prayer-requests').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '/personal-prayer-request',
+                ajax: '/all-prayer-request',
                 columns: [
+                    { data: 'requester', name: 'requester'},
                     { data: 'created_at', name: 'created_at'},
                     { data: 'request', name: 'request'},
                     { data: 'visibility', name: 'visibility'},
@@ -155,7 +160,9 @@
             prayerModal.find('.modal-title').text('Add Prayer Request');
             prayerModal.find('.text-danger').remove();
 
+            prayerModal.find('textarea[name="request"]').text("");
             prayerModal.find('.form-submit').trigger('reset');
+            prayerModal.find('input[name="target_completion"]').attr('disabled',false);
             prayerModal.find('.form-submit').removeAttr('id').attr('id','add-prayer-request-form');
         });
 

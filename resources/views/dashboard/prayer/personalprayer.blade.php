@@ -155,7 +155,9 @@
             prayerModal.find('.modal-title').text('Add Prayer Request');
             prayerModal.find('.text-danger').remove();
 
+            prayerModal.find('textarea[name="request"]').text("");
             prayerModal.find('.form-submit').trigger('reset');
+            prayerModal.find('input[name="target_completion"]').attr('disabled',false);
             prayerModal.find('.form-submit').removeAttr('id').attr('id','add-prayer-request-form');
         });
 

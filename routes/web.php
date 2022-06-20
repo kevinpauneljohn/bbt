@@ -28,6 +28,7 @@ Route::group(['middleware' => ['auth']],function (){
     Route::resource('prayer-requests',\App\Http\Controllers\Prayer\PrayerRequestController::class);
     Route::get('/my-personal-prayer-request',[\App\Http\Controllers\Prayer\PrayerRequestController::class,'personalPrayer'])->name('my.personal.prayer');
     Route::get('/personal-prayer-request',[\App\Http\Controllers\Prayer\PrayerRequestController::class,'getPersonalPrayer'])->name('get.personal.prayer');
+    Route::get('/all-prayer-request',[\App\Http\Controllers\Prayer\PrayerRequestController::class,'allPrayerRequest'])->name('all.prayer');
 
     Route::resource('roles',\App\Http\Controllers\RolesPermission\RolesController::class);
     Route::get('/all-roles',[\App\Http\Controllers\RolesPermission\RolesController::class,'role_lists'])->name('all-roles');

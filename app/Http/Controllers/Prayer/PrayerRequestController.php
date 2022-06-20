@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Prayer;
 
 use App\Http\Controllers\Controller;
 use App\Models\PrayerRequest;
+use App\Models\User;
 use App\Services\PrayerRequestService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -12,7 +13,8 @@ class PrayerRequestController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('permission:add prayer request')->only([]);
+        $this->middleware('permission:add prayer request')->only(['store']);
+        $this->middleware('permission:view prayer request')->only(['index','show','personalPrayer','getPersonalPrayer','allPrayerRequest']);
     }
     /**
      * Display a listing of the resource.
@@ -140,8 +142,16 @@ class PrayerRequestController extends Controller
      * @param PrayerRequestService $prayerRequestService
      * @return mixed
      */
-    public function getPersonalPrayer(PrayerRequestService $prayerRequestService)
+    public function getPersonalPrayer(PrayerRequestService $prayerRequestService): mixed
     {
-        return $prayerRequestService->personalPrayer(auth()->user()->id);
+        return $prayerRequestService->Prayer(PrayerRequest::where('user_id','=',auth()->user()->id)->get());
+    }
+
+    public function allPrayerRequest(PrayerRequestService $prayerRequestService)
+    {
+
+        $users = collect(User::where('church',auth()->user()->church)->get());
+        $prayerRequests = PrayerRequest::whereIn('user_id',$users->pluck('id'))->get();
+        return $prayerRequestService->Prayer($prayerRequests);
     }
 }
