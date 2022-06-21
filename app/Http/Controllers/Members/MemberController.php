@@ -1,0 +1,19 @@
+<?php
+
+namespace App\Http\Controllers\Members;
+
+use App\Http\Controllers\Controller;
+use App\Models\User;
+use Illuminate\Http\Request;
+
+class MemberController extends Controller
+{
+    public function __construct()
+    {
+        $this->middleware('members_only')->only(['member_profile']);
+    }
+    public function member_profile()
+    {
+        return view('dashboard.members.profile');
+    }
+}

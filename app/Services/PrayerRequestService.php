@@ -49,7 +49,7 @@ class PrayerRequestService
 
             })
             ->addColumn('requester', function($request){
-                return '<a href="#">'.ucwords($request->user->fullname).'</a>';
+                return '<a href="'.route('member.profile',['member' => $request->user_id]).'">'.ucwords($request->user->fullname).'</a>';
             })
             ->addColumn('action', function($request){
                 $action = '';
