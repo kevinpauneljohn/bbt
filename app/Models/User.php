@@ -97,4 +97,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(PrayerRequest::class);
     }
+
+    public function prayer_lists(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(PrayerList::class);
+    }
 }

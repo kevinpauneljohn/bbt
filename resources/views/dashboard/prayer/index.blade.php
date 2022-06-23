@@ -88,7 +88,7 @@
                         </div>
                         <div class="modal-footer justify-content-between">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary save">Save</button>
+                            <button type="button" class="btn btn-primary add-to-prayer-list">Add to prayer list</button>
                         </div>
                     </div>
                     <!-- /.modal-content -->
@@ -362,7 +362,9 @@
             });
         @endcan
 
+        let viewPrayerModal = $('#view-prayer-request');
         @can('view prayer request')
+
             $(document).on('click','.view-prayer-request-btn',function(){
                 requestId = this.id;
 
@@ -372,8 +374,6 @@
                 beforeSend: function(){
 
                 },success: function(response){
-                    let viewPrayerModal = $('#view-prayer-request');
-
                     viewPrayerModal.find('table #date-requested').text(response.date_requested);
                     viewPrayerModal.find('table #requester').text(response.fullname);
                     viewPrayerModal.find('table #visibility').text(response.visibility);
@@ -383,11 +383,50 @@
                     viewPrayerModal.find('table #recurring').text(response.recurring_status);
                     viewPrayerModal.find('table #details').text(response.request);
 
+
+                    if(response.add_to_list === true && response.existing_from_list === 0)
+                    {
+                        viewPrayerModal.find('.add-to-prayer-list').removeAttr('id').attr({id: requestId, disabled: false}).text('Add to prayer list').removeClass('btn-success').addClass('btn-primary');
+                        viewPrayerModal.find('.add-to-prayer-list').attr({id: requestId, disabled: false});
+                    }else{
+                        viewPrayerModal.find('.add-to-prayer-list').removeAttr('id').attr('disabled',true).text('Add to prayer list').removeClass('btn-success').addClass('btn-primary');
+                    }
+
+                    if(response.existing_from_list === 1)
+                    {
+                        viewPrayerModal.find('.add-to-prayer-list').text('Added').removeClass('btn-primary').addClass('btn-success').attr('disabled',true);;
+                    }
+
+
                 },error: function(xhr, status, error){
                     console.log(xhr);
                 }
             });
         });
+        @endcan
+
+        @can('add prayer list')
+            let prayer_list_id;
+            $(document).on('click','.add-to-prayer-list', function(){
+                prayer_list_id = this.id;
+                $.ajax({
+                    url: '/prayer-lists/',
+                    type: 'POST',
+                    data: {'id' : prayer_list_id},
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    beforeSend: function(){
+                        viewPrayerModal.find('.add-to-prayer-list').attr('disabled',true).text('Adding...');
+                    },success: function(response){
+                        console.log(response);
+                        if(response.success === true)
+                        {
+                            viewPrayerModal.find('.add-to-prayer-list').text('Added').removeClass('btn-primary').addClass('btn-success');
+                        }
+                    },error: function(xhr, status, error){
+                        console.log(xhr);
+                    }
+                });
+            });
         @endcan
 
     </script>

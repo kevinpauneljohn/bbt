@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Prayer;
 
 use App\Http\Controllers\Controller;
+use App\Models\PrayerList;
 use App\Models\PrayerRequest;
 use App\Models\User;
 use App\Services\PrayerRequestService;
@@ -174,7 +175,9 @@ class PrayerRequestController extends Controller
                 'fullname' => $prayer->user->fullname,
                 'date_requested' => Carbon::parse($prayer->cretaed_at)->format('M d, Y'),
                 'expected_date' => Carbon::parse($prayer->target_completion)->format('M d, Y'),
-                'recurring_status' => $prayer->recurring == 1 ? 'yes' : 'no'
+                'recurring_status' => $prayer->recurring == 1 ? 'yes' : 'no',
+                'add_to_list' => !($prayer->user_id === auth()->user()->id),
+                'existing_from_list' => PrayerList::where('user_id',auth()->user()->id)->where('prayer_request_id',$id)->count()
                 ]);
     }
 }

@@ -25,6 +25,8 @@ Route::group(['middleware' => ['auth']],function (){
     Route::resource('users',\App\Http\Controllers\Users\UserController::class);
     Route::get('/all-users',[\App\Http\Controllers\Users\UserController::class,'all_users'])->name('all-users');
 
+    Route::resource('/prayer-lists',\App\Http\Controllers\Prayer\PrayerListController::class);
+
     Route::get('/member-profile/{member}',[\App\Http\Controllers\Members\MemberController::class,'member_profile'])->name('member.profile');
 
     Route::resource('prayer-requests',\App\Http\Controllers\Prayer\PrayerRequestController::class);

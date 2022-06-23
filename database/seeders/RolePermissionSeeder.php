@@ -51,5 +51,11 @@ class RolePermissionSeeder extends Seeder
         Permission::create(['name' => 'delete prayer request'])->syncRoles(['admin','member','pastor','song leader']);
         Permission::create(['name' => 'edit prayer request'])->syncRoles(['admin','member','pastor','song leader']);
         Permission::create(['name' => 'view prayer request'])->syncRoles(['admin','member','pastor','song leader']);
+
+//        prayer list
+        Permission::create(['name' => 'add prayer list'])->syncRoles(['admin','member','pastor','song leader']);
+        Permission::create(['name' => 'delete prayer list'])->syncRoles(['admin','member','pastor','song leader']);
+        Permission::create(['name' => 'edit prayer list'])->syncRoles(['admin','member','pastor','song leader']);
+        Permission::create(['name' => 'view prayer list'])->syncRoles(['admin','member','pastor','song leader']);
     }
 }
