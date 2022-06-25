@@ -1,16 +1,16 @@
 @extends('adminlte::page')
 
-@section('title', 'All Prayer Requests')
+@section('title', 'My Prayer Lists')
 
 @section('content_header')
     <div class="row mb-2">
         <div class="col-sm-6">
-            <h1 class="m-0 text-dark">All Prayer Requests</h1>
+            <h1 class="m-0 text-dark">My Prayer Lists</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
                 <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item active">All Prayer Requests</li>
+                <li class="breadcrumb-item active">My Prayer Lists</li>
             </ol>
         </div><!-- /.col -->
     </div>
@@ -47,51 +47,51 @@
     @can('view prayer request')
         <div class="modal fade " id="view-prayer-request">
             <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Prayer Request Details</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <table class="table table-bordered">
-                                <tr>
-                                    <td width="30%">Date Requested</td>
-                                    <td id="date-requested"></td>
-                                </tr>
-                                <tr>
-                                    <td>Requester</td>
-                                    <td id="requester"></td>
-                                </tr>
-                                <tr>
-                                    <td>Visibility</td>
-                                    <td id="visibility"></td>
-                                </tr>
-                                <tr>
-                                    <td>Status</td>
-                                    <td id="status"></td>
-                                </tr>
-                                <tr>
-                                    <td>Expected Date</td>
-                                    <td id="expected-date"></td>
-                                </tr>
-                                <tr>
-                                    <td>Recurring</td>
-                                    <td id="recurring"></td>
-                                </tr>
-                                <tr>
-                                    <td>Details</td>
-                                    <td id="details"></td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div class="modal-footer justify-content-between">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary add-to-prayer-list">Add to prayer list</button>
-                        </div>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Prayer Request Details</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                    <!-- /.modal-content -->
+                    <div class="modal-body">
+                        <table class="table table-bordered">
+                            <tr>
+                                <td width="30%">Date Requested</td>
+                                <td id="date-requested"></td>
+                            </tr>
+                            <tr>
+                                <td>Requester</td>
+                                <td id="requester"></td>
+                            </tr>
+                            <tr>
+                                <td>Visibility</td>
+                                <td id="visibility"></td>
+                            </tr>
+                            <tr>
+                                <td>Status</td>
+                                <td id="status"></td>
+                            </tr>
+                            <tr>
+                                <td>Expected Date</td>
+                                <td id="expected-date"></td>
+                            </tr>
+                            <tr>
+                                <td>Recurring</td>
+                                <td id="recurring"></td>
+                            </tr>
+                            <tr>
+                                <td>Details</td>
+                                <td id="details"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary add-to-prayer-list">Add to prayer list</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
             </div>
             <!-- /.modal-dialog -->
         </div>
@@ -323,8 +323,8 @@
         @endcan
 
         @can('delete prayer request')
-            $(document).on('click','.delete-prayer-request-btn',function(){
-                requestId = this.id;
+        $(document).on('click','.delete-prayer-request-btn',function(){
+            requestId = this.id;
 
             Swal.fire({
                 title: 'Are you sure?',
@@ -359,14 +359,14 @@
 
                 }
             })
-            });
+        });
         @endcan
 
         let viewPrayerModal = $('#view-prayer-request');
         @can('view prayer request')
 
-            $(document).on('click','.view-prayer-request-btn',function(){
-                requestId = this.id;
+        $(document).on('click','.view-prayer-request-btn',function(){
+            requestId = this.id;
 
             $.ajax({
                 url: '/prayer-request-details/'+requestId,
@@ -386,16 +386,15 @@
 
                     if(response.add_to_list === true && response.existing_from_list === 0)
                     {
-                        viewPrayerModal.find('.add-to-prayer-list').removeAttr('id').attr({id: requestId, disabled: false}).text('Add to prayer list').removeClass('btn-warning remove-list').addClass('btn-primary');
+                        viewPrayerModal.find('.add-to-prayer-list').removeAttr('id').attr({id: requestId, disabled: false}).text('Add to prayer list').removeClass('btn-success').addClass('btn-primary');
                         viewPrayerModal.find('.add-to-prayer-list').attr({id: requestId, disabled: false});
                     }else{
-                        viewPrayerModal.find('.add-to-prayer-list').removeAttr('id').attr('disabled',true).text('Add to prayer list').removeClass('btn-warning remove-list').addClass('btn-primary');
+                        viewPrayerModal.find('.add-to-prayer-list').removeAttr('id').attr('disabled',true).text('Add to prayer list').removeClass('btn-success').addClass('btn-primary');
                     }
 
                     if(response.existing_from_list === 1)
                     {
-                        // viewPrayerModal.find('.add-to-prayer-list').text('Added').removeClass('btn-primary').addClass('btn-success').attr('disabled',true);
-                        viewPrayerModal.find('.add-to-prayer-list').text('Remove from list').removeClass('btn-primary').addClass('btn-warning remove-list').attr({id: requestId, disabled: false});
+                        viewPrayerModal.find('.add-to-prayer-list').text('Added').removeClass('btn-primary').addClass('btn-success').attr('disabled',true);;
                     }
 
 
@@ -407,33 +406,27 @@
         @endcan
 
         @can('add prayer list')
-            let prayer_list_id;
-            $(document).on('click','.add-to-prayer-list', function(){
-                prayer_list_id = this.id;
-                if($(this).hasClass('remove-list')){
-                    console.log('exists');
-                }else{
-
-                    $.ajax({
-                        url: '/prayer-lists/',
-                        type: 'POST',
-                        data: {'id' : prayer_list_id},
-                        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                        beforeSend: function(){
-                            viewPrayerModal.find('.add-to-prayer-list').attr('disabled',true).text('Adding...');
-                        },success: function(response){
-                            console.log(response);
-                            if(response.success === true)
-                            {
-                                viewPrayerModal.find('.add-to-prayer-list').text('Remove from list').removeClass('btn-primary').addClass('btn-warning remove-list').attr({id: prayer_list_id, disabled: false});
-                            }
-                        },error: function(xhr, status, error){
-                            console.log(xhr);
-                        }
-                    });
-
+        let prayer_list_id;
+        $(document).on('click','.add-to-prayer-list', function(){
+            prayer_list_id = this.id;
+            $.ajax({
+                url: '/prayer-lists/',
+                type: 'POST',
+                data: {'id' : prayer_list_id},
+                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                beforeSend: function(){
+                    viewPrayerModal.find('.add-to-prayer-list').attr('disabled',true).text('Adding...');
+                },success: function(response){
+                    console.log(response);
+                    if(response.success === true)
+                    {
+                        viewPrayerModal.find('.add-to-prayer-list').text('Added').removeClass('btn-primary').addClass('btn-success');
+                    }
+                },error: function(xhr, status, error){
+                    console.log(xhr);
                 }
             });
+        });
         @endcan
 
     </script>

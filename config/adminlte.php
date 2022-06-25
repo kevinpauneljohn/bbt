@@ -274,6 +274,12 @@ return [
                     'route'        => 'my.personal.prayer',
                     'can' => 'view prayer request',
                 ],
+                [
+                    'text'       => 'My Prayer Lists',
+                    'icon_color' => 'red',
+                    'route'        => 'prayer-lists.index',
+                    'can' => 'view prayer request',
+                ],
             ],
         ],
         [

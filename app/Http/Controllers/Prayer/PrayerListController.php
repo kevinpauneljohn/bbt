@@ -15,7 +15,7 @@ class PrayerListController extends Controller
      */
     public function index()
     {
-        //
+        return view('dashboard.prayer.prayerlist');
     }
 
     /**
@@ -89,5 +89,10 @@ class PrayerListController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function my_prayer_lists()
+    {
+
     }
 }

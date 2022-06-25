@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\PrayerList;
 use App\Models\PrayerRequest;
 use Carbon\Carbon;
 use Yajra\DataTables\DataTables;
@@ -66,6 +67,9 @@ class PrayerRequestService
                     $action .= '<button class="btn btn-xs btn-danger delete-prayer-request-btn" id="'.$request->id.'" title="Delete"><i class="fa fa-trash"></i></button>';
                 }
                 return $action;
+            })
+            ->setRowClass(function($request){
+                return PrayerList::where('user_id',auth()->user()->id)->where('prayer_request_id',$request->id)->count() > 0 ? 'added' : 'not-added';
             })
             ->rawColumns(['action','status','visibility','request','requester'])
             ->make(true);
