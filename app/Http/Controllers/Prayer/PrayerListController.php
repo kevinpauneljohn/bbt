@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Prayer;
 
 use App\Http\Controllers\Controller;
 use App\Models\PrayerList;
+use App\Models\PrayerRequest;
+use App\Services\PrayerRequestService;
 use Illuminate\Http\Request;
 
 class PrayerListController extends Controller
@@ -84,15 +86,21 @@ class PrayerListController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
     {
-        //
+        if(PrayerList::where('prayer_request_id',$id)->delete()){
+            return response()->json(['success' => true, 'message' => 'Prayer successfully removed']);
+        }else{
+            return response()->json(['success' => false, 'message' => 'An error occurred']);
+        }
+
     }
 
-    public function my_prayer_lists()
+    public function my_prayer_lists(PrayerRequestService $prayerRequestService)
     {
-
+        $lists = collect(auth()->user()->prayer_lists)->pluck('prayer_request_id');
+        return $prayerRequestService->Prayer(PrayerRequest::whereIn('id',$lists)->get());
     }
 }

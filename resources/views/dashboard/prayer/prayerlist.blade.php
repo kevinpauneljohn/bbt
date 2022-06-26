@@ -183,7 +183,7 @@
             $('#prayer-requests').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '/all-prayer-request',
+                ajax: '/my-prayer-list',
                 columns: [
                     { data: 'requester', name: 'requester'},
                     { data: 'created_at', name: 'created_at'},
@@ -386,15 +386,16 @@
 
                     if(response.add_to_list === true && response.existing_from_list === 0)
                     {
-                        viewPrayerModal.find('.add-to-prayer-list').removeAttr('id').attr({id: requestId, disabled: false}).text('Add to prayer list').removeClass('btn-success').addClass('btn-primary');
+                        viewPrayerModal.find('.add-to-prayer-list').removeAttr('id').attr({id: requestId, disabled: false}).text('Add to prayer list').removeClass('btn-warning remove-list').addClass('btn-primary');
                         viewPrayerModal.find('.add-to-prayer-list').attr({id: requestId, disabled: false});
                     }else{
-                        viewPrayerModal.find('.add-to-prayer-list').removeAttr('id').attr('disabled',true).text('Add to prayer list').removeClass('btn-success').addClass('btn-primary');
+                        viewPrayerModal.find('.add-to-prayer-list').removeAttr('id').attr('disabled',true).text('Add to prayer list').removeClass('btn-warning remove-list').addClass('btn-primary');
                     }
 
                     if(response.existing_from_list === 1)
                     {
-                        viewPrayerModal.find('.add-to-prayer-list').text('Added').removeClass('btn-primary').addClass('btn-success').attr('disabled',true);;
+                        // viewPrayerModal.find('.add-to-prayer-list').text('Added').removeClass('btn-primary').addClass('btn-success').attr('disabled',true);
+                        viewPrayerModal.find('.add-to-prayer-list').text('Remove from list').removeClass('btn-primary').addClass('btn-warning remove-list').attr({id: requestId, disabled: false});
                     }
 
 
@@ -409,23 +410,57 @@
         let prayer_list_id;
         $(document).on('click','.add-to-prayer-list', function(){
             prayer_list_id = this.id;
-            $.ajax({
-                url: '/prayer-lists/',
-                type: 'POST',
-                data: {'id' : prayer_list_id},
-                headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-                beforeSend: function(){
-                    viewPrayerModal.find('.add-to-prayer-list').attr('disabled',true).text('Adding...');
-                },success: function(response){
-                    console.log(response);
-                    if(response.success === true)
-                    {
-                        viewPrayerModal.find('.add-to-prayer-list').text('Added').removeClass('btn-primary').addClass('btn-success');
+            if($(this).hasClass('remove-list')){
+                $.ajax({
+                    url: '/prayer-lists/'+prayer_list_id,
+                    type: 'DELETE',
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    beforeSend: function(){
+
+                    },success: function(response){
+                        console.log(response);
+
+                        if(response.success === true)
+                        {
+                            let table = $('#prayer-requests').DataTable();
+                            table.ajax.reload(null, false);
+                            Toast.fire({
+                                type: 'success',
+                                title: response.message
+                            });
+                            viewPrayerModal.modal('toggle');
+                        }
+                    },error: function(xhr, status, error){
+                        console.log(xhr);
                     }
-                },error: function(xhr, status, error){
-                    console.log(xhr);
-                }
-            });
+                });
+            }else{
+
+                $.ajax({
+                    url: '/prayer-lists/',
+                    type: 'POST',
+                    data: {'id' : prayer_list_id},
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    beforeSend: function(){
+                        viewPrayerModal.find('.add-to-prayer-list').attr('disabled',true).text('Adding...');
+                    },success: function(response){
+                        console.log(response);
+                        if(response.success === true)
+                        {
+                            let table = $('#prayer-requests').DataTable();
+                            table.ajax.reload(null, false);
+                            Toast.fire({
+                                type: 'success',
+                                title: response.message
+                            });
+                            viewPrayerModal.find('.add-to-prayer-list').text('Remove from list').removeClass('btn-primary').addClass('btn-warning remove-list').attr({id: prayer_list_id, disabled: false});
+                        }
+                    },error: function(xhr, status, error){
+                        console.log(xhr);
+                    }
+                });
+
+            }
         });
         @endcan
 

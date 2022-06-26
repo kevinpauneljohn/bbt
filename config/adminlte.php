@@ -269,7 +269,7 @@ return [
                     'can' => 'view prayer request',
                 ],
                 [
-                    'text'       => 'Personal Prayer Request',
+                    'text'       => 'My Personal Prayer',
                     'icon_color' => 'red',
                     'route'        => 'my.personal.prayer',
                     'can' => 'view prayer request',
