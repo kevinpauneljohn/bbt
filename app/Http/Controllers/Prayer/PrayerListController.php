@@ -101,6 +101,6 @@ class PrayerListController extends Controller
     public function my_prayer_lists(PrayerRequestService $prayerRequestService)
     {
         $lists = collect(auth()->user()->prayer_lists)->pluck('prayer_request_id');
-        return $prayerRequestService->Prayer(PrayerRequest::whereIn('id',$lists)->get());
+        return $prayerRequestService->Prayer(PrayerRequest::whereIn('id',$lists)->where('visibility','public')->get());
     }
 }
