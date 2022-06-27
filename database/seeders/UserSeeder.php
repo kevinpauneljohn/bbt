@@ -22,7 +22,7 @@ class UserSeeder extends Seeder
         $user->email = "johnkevinpaunel@gmail.com";
         $user->username = "kevinpauneljohn";
         $user->mobile_number = "09166520817";
-        $user->password = "kamotengpusa999P";
+        $user->password = "kevinpauneljohn";
         $user->church = 1;
         $user->assignRole('super admin');
         $user->save();
