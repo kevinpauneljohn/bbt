@@ -23,6 +23,7 @@ class UserSeeder extends Seeder
         $user->username = "kevinpauneljohn";
         $user->mobile_number = "09166520817";
         $user->password = "123";
+        $user->church = 1;
         $user->assignRole('super admin');
         $user->save();
 
