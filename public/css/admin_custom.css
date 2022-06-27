@@ -1,3 +1,8 @@
 .added{
     background-color:#d7fbd2;
 }
+
+.dataTables_wrapper{
+    overflow-x:auto;
+}
+
