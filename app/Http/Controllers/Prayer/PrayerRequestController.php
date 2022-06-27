@@ -180,4 +180,21 @@ class PrayerRequestController extends Controller
                 'existing_from_list' => PrayerList::where('user_id',auth()->user()->id)->where('prayer_request_id',$id)->count()
                 ]);
     }
+
+    /**
+     * display all the prayer request of a specific user
+     * @param $user_id
+     * @param PrayerRequestService $prayerRequestService
+     * @return mixed
+     */
+    public function user_prayer_request($user_id, PrayerRequestService $prayerRequestService): mixed
+    {
+        if(auth()->user()->id === $user_id)
+        {
+            return $prayerRequestService->Prayer(PrayerRequest::where('user_id',$user_id)->get());
+        }else{
+            return $prayerRequestService->Prayer(PrayerRequest::where('user_id',$user_id)->where('visibility','public')->get());
+        }
+
+    }
 }

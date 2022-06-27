@@ -12,8 +12,9 @@ class MemberController extends Controller
     {
         $this->middleware('members_only')->only(['member_profile']);
     }
-    public function member_profile()
+    public function member_profile($member)
     {
-        return view('dashboard.members.profile');
+        $user = User::find($member);
+        return view('dashboard.members.profile',compact('user'));
     }
 }

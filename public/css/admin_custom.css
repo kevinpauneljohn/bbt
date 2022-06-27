@@ -1,7 +1,9 @@
 .added{
     background-color:#d7fbd2;
 }
-
+.required{
+    color:red;
+}
 .dataTables_wrapper{
     overflow-x:auto;
 }

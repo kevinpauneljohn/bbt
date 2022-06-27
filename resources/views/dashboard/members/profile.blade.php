@@ -29,24 +29,28 @@
                                 <img class="profile-user-img img-fluid img-circle" src="https://picsum.photos/300/300" alt="User profile picture">
                             </div>
 
-                            <h3 class="profile-username text-center">{{ucwords(auth()->user()->fullname)}}</h3>
+                            <h3 class="profile-username text-center">{{ucwords($user->fullname)}}</h3>
 
                             <p class="text-muted text-center">
-                                @foreach(auth()->user()->getRoleNames() as $role)
+                                @foreach($user->getRoleNames() as $role)
                                     <span class="right badge badge-success">{{$role}}</span>
                                 @endforeach
                             </p>
 
                             <ul class="list-group list-group-unbordered mb-3">
                                 <li class="list-group-item">
-                                    <b>Dates Saved</b> <a class="float-right">01/06/2006</a>
+                                    <b>Date Saved</b> <a class="float-right">01/06/2006</a>
                                 </li>
                                 <li class="list-group-item">
                                     <b>Date Of Birth</b> <a class="float-right">01/06/2006</a>
                                 </li>
+                                <li class="list-group-item">
+                                    <b>Mobile Number</b> <a class="float-right">{{$user->mobile_number}}</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>Email</b> <a class="float-right">{{$user->email}}</a>
+                                </li>
                             </ul>
-
-                            <a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>
                         </div>
                         <!-- /.card-body -->
                     </div>
@@ -78,271 +82,156 @@
                     <div class="card">
                         <div class="card-header p-2">
                             <ul class="nav nav-pills">
-                                <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Activity</a></li>
-                                <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Timeline</a></li>
-                                <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Settings</a></li>
+                                <li class="nav-item"><a class="nav-link active" href="#prayer-request" data-toggle="tab">Prayer Request</a></li>
+                                @if(auth()->user()->id === $user->id)
+                                    <li class="nav-item"><a class="nav-link" href="#update-profile" data-toggle="tab">Update profile</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#change-password" data-toggle="tab">Change Password</a></li>
+                                @endif
+
                             </ul>
                         </div><!-- /.card-header -->
                         <div class="card-body">
-                            <div class="tab-content">
-                                <div class="active tab-pane" id="activity">
-                                    <!-- Post -->
-                                    <div class="post">
-                                        <div class="user-block">
-                                            <img class="img-circle img-bordered-sm" src="../../dist/img/user1-128x128.jpg" alt="user image">
-                                            <span class="username">
-                          <a href="#">Jonathan Burke Jr.</a>
-                          <a href="#" class="float-right btn-tool"><i class="fas fa-times"></i></a>
-                        </span>
-                                            <span class="description">Shared publicly - 7:30 PM today</span>
-                                        </div>
-                                        <!-- /.user-block -->
-                                        <p>
-                                            Lorem ipsum represents a long-held tradition for designers,
-                                            typographers and the like. Some people hate it and argue for
-                                            its demise, but others ignore the hate as they create awesome
-                                            tools to help create filler text for everyone from bacon lovers
-                                            to Charlie Sheen fans.
-                                        </p>
-
-                                        <p>
-                                            <a href="#" class="link-black text-sm mr-2"><i class="fas fa-share mr-1"></i> Share</a>
-                                            <a href="#" class="link-black text-sm"><i class="far fa-thumbs-up mr-1"></i> Like</a>
-                                            <span class="float-right">
-                          <a href="#" class="link-black text-sm">
-                            <i class="far fa-comments mr-1"></i> Comments (5)
-                          </a>
-                        </span>
-                                        </p>
-
-                                        <input class="form-control form-control-sm" type="text" placeholder="Type a comment">
-                                    </div>
-                                    <!-- /.post -->
-
-                                    <!-- Post -->
-                                    <div class="post clearfix">
-                                        <div class="user-block">
-                                            <img class="img-circle img-bordered-sm" src="../../dist/img/user7-128x128.jpg" alt="User Image">
-                                            <span class="username">
-                          <a href="#">Sarah Ross</a>
-                          <a href="#" class="float-right btn-tool"><i class="fas fa-times"></i></a>
-                        </span>
-                                            <span class="description">Sent you a message - 3 days ago</span>
-                                        </div>
-                                        <!-- /.user-block -->
-                                        <p>
-                                            Lorem ipsum represents a long-held tradition for designers,
-                                            typographers and the like. Some people hate it and argue for
-                                            its demise, but others ignore the hate as they create awesome
-                                            tools to help create filler text for everyone from bacon lovers
-                                            to Charlie Sheen fans.
-                                        </p>
-
+                            <div class="tab-content">'
+                                <div class="active tab-pane" id="prayer-request">
+                                    @if(auth()->user()->can('add prayer request') && auth()->user()->id === $user->id)
+                                        <button class="btn btn-primary btn-sm add-prayer-btn" data-toggle="modal" data-target="#add-prayer-request">Add</button>
+                                    @endif
+                                    <table id="prayer-requests" class="table table-hover table-bordered" role="grid">
+                                        <thead>
+                                        <tr role="row">
+                                            <th width="15%">Date Requested</th>
+                                            <th width="30%">Prayer Request</th>
+                                            <th>Visibility</th>
+                                            <th width="10%">Expected Date Answered</th>
+                                            <th width="10%">Date Answered</th>
+                                            <th width="10%">Status</th>
+                                            <th>Recurring</th>
+                                            <th>Action</th>
+                                        </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                                @if(auth()->user()->id === $user->id)
+                                    <div class="tab-pane" id="update-profile">
                                         <form class="form-horizontal">
-                                            <div class="input-group input-group-sm mb-0">
-                                                <input class="form-control form-control-sm" placeholder="Response">
-                                                <div class="input-group-append">
-                                                    <button type="submit" class="btn btn-danger">Send</button>
+                                            <h4 class="text-cyan">Full Name</h4>
+                                            <hr/>
+                                            <div class="form-group row firstname">
+                                                <label for="firstname" class="col-sm-2 col-form-label">First Name</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="firstname" placeholder="First Name">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row middlename">
+                                                <label for="middlename" class="col-sm-2 col-form-label">Middle Name</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="middlename" placeholder="Middle Name">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row lastname">
+                                                <label for="lastname" class="col-sm-2 col-form-label">Last Name</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="lastname" placeholder="Last Name">
+                                                </div>
+                                            </div>
+
+                                            <br/><h4 class="text-cyan">Profile Details</h4>
+                                            <hr/>
+                                            <div class="form-group row date_saved">
+                                                <label for="date_saved" class="col-sm-2 col-form-label">Date Saved</label>
+                                                <div class="col-sm-10">
+                                                    <input type="date" class="form-control" id="date_saved">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row date_of_birth">
+                                                <label for="date_of_birth" class="col-sm-2 col-form-label">Date Of Birth</label>
+                                                <div class="col-sm-10">
+                                                    <input type="date" class="form-control" id="date_of_birth">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row mobile_number">
+                                                <label for="mobile_number" class="col-sm-2 col-form-label">Mobile Number</label>
+                                                <div class="col-sm-10">
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                                        </div>
+                                                        <input type="text" class="form-control" id="mobile_number" data-inputmask='"mask": "(+63) 999-9999-999"' data-mask>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="inputSkills" class="col-sm-2 col-form-label">Skills</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="inputSkills" placeholder="Skills">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="offset-sm-2 col-sm-10">
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            <input type="checkbox"> I agree to the <a href="#">terms and conditions</a>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="offset-sm-2 col-sm-10">
+                                                    <button type="submit" class="btn btn-danger">Submit</button>
                                                 </div>
                                             </div>
                                         </form>
                                     </div>
-                                    <!-- /.post -->
-
-                                    <!-- Post -->
-                                    <div class="post">
-                                        <div class="user-block">
-                                            <img class="img-circle img-bordered-sm" src="../../dist/img/user6-128x128.jpg" alt="User Image">
-                                            <span class="username">
-                          <a href="#">Adam Jones</a>
-                          <a href="#" class="float-right btn-tool"><i class="fas fa-times"></i></a>
-                        </span>
-                                            <span class="description">Posted 5 photos - 5 days ago</span>
-                                        </div>
-                                        <!-- /.user-block -->
-                                        <div class="row mb-3">
-                                            <div class="col-sm-6">
-                                                <img class="img-fluid" src="../../dist/img/photo1.png" alt="Photo">
+                                    <div class="tab-pane" id="change-password">
+                                        <form class="form-horizontal">
+                                            <div class="form-group row">
+                                                <label for="inputName" class="col-sm-2 col-form-label">Name</label>
+                                                <div class="col-sm-10">
+                                                    <input type="email" class="form-control" id="inputName" placeholder="Name">
+                                                </div>
                                             </div>
-                                            <!-- /.col -->
-                                            <div class="col-sm-6">
-                                                <div class="row">
-                                                    <div class="col-sm-6">
-                                                        <img class="img-fluid mb-3" src="../../dist/img/photo2.png" alt="Photo">
-                                                        <img class="img-fluid" src="../../dist/img/photo3.jpg" alt="Photo">
+                                            <div class="form-group row">
+                                                <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
+                                                <div class="col-sm-10">
+                                                    <input type="email" class="form-control" id="inputEmail" placeholder="Email">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="inputName2" class="col-sm-2 col-form-label">Name</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="inputName2" placeholder="Name">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="inputExperience" class="col-sm-2 col-form-label">Experience</label>
+                                                <div class="col-sm-10">
+                                                    <textarea class="form-control" id="inputExperience" placeholder="Experience"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="inputSkills" class="col-sm-2 col-form-label">Skills</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="inputSkills" placeholder="Skills">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <div class="offset-sm-2 col-sm-10">
+                                                    <div class="checkbox">
+                                                        <label>
+                                                            <input type="checkbox"> I agree to the <a href="#">terms and conditions</a>
+                                                        </label>
                                                     </div>
-                                                    <!-- /.col -->
-                                                    <div class="col-sm-6">
-                                                        <img class="img-fluid mb-3" src="../../dist/img/photo4.jpg" alt="Photo">
-                                                        <img class="img-fluid" src="../../dist/img/photo1.png" alt="Photo">
-                                                    </div>
-                                                    <!-- /.col -->
                                                 </div>
-                                                <!-- /.row -->
                                             </div>
-                                            <!-- /.col -->
-                                        </div>
-                                        <!-- /.row -->
-
-                                        <p>
-                                            <a href="#" class="link-black text-sm mr-2"><i class="fas fa-share mr-1"></i> Share</a>
-                                            <a href="#" class="link-black text-sm"><i class="far fa-thumbs-up mr-1"></i> Like</a>
-                                            <span class="float-right">
-                          <a href="#" class="link-black text-sm">
-                            <i class="far fa-comments mr-1"></i> Comments (5)
-                          </a>
-                        </span>
-                                        </p>
-
-                                        <input class="form-control form-control-sm" type="text" placeholder="Type a comment">
+                                            <div class="form-group row">
+                                                <div class="offset-sm-2 col-sm-10">
+                                                    <button type="submit" class="btn btn-danger">Submit</button>
+                                                </div>
+                                            </div>
+                                        </form>
                                     </div>
-                                    <!-- /.post -->
-                                </div>
-                                <!-- /.tab-pane -->
-                                <div class="tab-pane" id="timeline">
-                                    <!-- The timeline -->
-                                    <div class="timeline timeline-inverse">
-                                        <!-- timeline time label -->
-                                        <div class="time-label">
-                        <span class="bg-danger">
-                          10 Feb. 2014
-                        </span>
-                                        </div>
-                                        <!-- /.timeline-label -->
-                                        <!-- timeline item -->
-                                        <div>
-                                            <i class="fas fa-envelope bg-primary"></i>
-
-                                            <div class="timeline-item">
-                                                <span class="time"><i class="far fa-clock"></i> 12:05</span>
-
-                                                <h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>
-
-                                                <div class="timeline-body">
-                                                    Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
-                                                    weebly ning heekya handango imeem plugg dopplr jibjab, movity
-                                                    jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
-                                                    quora plaxo ideeli hulu weebly balihoo...
-                                                </div>
-                                                <div class="timeline-footer">
-                                                    <a href="#" class="btn btn-primary btn-sm">Read more</a>
-                                                    <a href="#" class="btn btn-danger btn-sm">Delete</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- END timeline item -->
-                                        <!-- timeline item -->
-                                        <div>
-                                            <i class="fas fa-user bg-info"></i>
-
-                                            <div class="timeline-item">
-                                                <span class="time"><i class="far fa-clock"></i> 5 mins ago</span>
-
-                                                <h3 class="timeline-header border-0"><a href="#">Sarah Young</a> accepted your friend request
-                                                </h3>
-                                            </div>
-                                        </div>
-                                        <!-- END timeline item -->
-                                        <!-- timeline item -->
-                                        <div>
-                                            <i class="fas fa-comments bg-warning"></i>
-
-                                            <div class="timeline-item">
-                                                <span class="time"><i class="far fa-clock"></i> 27 mins ago</span>
-
-                                                <h3 class="timeline-header"><a href="#">Jay White</a> commented on your post</h3>
-
-                                                <div class="timeline-body">
-                                                    Take me to your leader!
-                                                    Switzerland is small and neutral!
-                                                    We are more like Germany, ambitious and misunderstood!
-                                                </div>
-                                                <div class="timeline-footer">
-                                                    <a href="#" class="btn btn-warning btn-flat btn-sm">View comment</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- END timeline item -->
-                                        <!-- timeline time label -->
-                                        <div class="time-label">
-                        <span class="bg-success">
-                          3 Jan. 2014
-                        </span>
-                                        </div>
-                                        <!-- /.timeline-label -->
-                                        <!-- timeline item -->
-                                        <div>
-                                            <i class="fas fa-camera bg-purple"></i>
-
-                                            <div class="timeline-item">
-                                                <span class="time"><i class="far fa-clock"></i> 2 days ago</span>
-
-                                                <h3 class="timeline-header"><a href="#">Mina Lee</a> uploaded new photos</h3>
-
-                                                <div class="timeline-body">
-                                                    <img src="https://placehold.it/150x100" alt="...">
-                                                    <img src="https://placehold.it/150x100" alt="...">
-                                                    <img src="https://placehold.it/150x100" alt="...">
-                                                    <img src="https://placehold.it/150x100" alt="...">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- END timeline item -->
-                                        <div>
-                                            <i class="far fa-clock bg-gray"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- /.tab-pane -->
-
-                                <div class="tab-pane" id="settings">
-                                    <form class="form-horizontal">
-                                        <div class="form-group row">
-                                            <label for="inputName" class="col-sm-2 col-form-label">Name</label>
-                                            <div class="col-sm-10">
-                                                <input type="email" class="form-control" id="inputName" placeholder="Name">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
-                                            <div class="col-sm-10">
-                                                <input type="email" class="form-control" id="inputEmail" placeholder="Email">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="inputName2" class="col-sm-2 col-form-label">Name</label>
-                                            <div class="col-sm-10">
-                                                <input type="text" class="form-control" id="inputName2" placeholder="Name">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="inputExperience" class="col-sm-2 col-form-label">Experience</label>
-                                            <div class="col-sm-10">
-                                                <textarea class="form-control" id="inputExperience" placeholder="Experience"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="inputSkills" class="col-sm-2 col-form-label">Skills</label>
-                                            <div class="col-sm-10">
-                                                <input type="text" class="form-control" id="inputSkills" placeholder="Skills">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <div class="offset-sm-2 col-sm-10">
-                                                <div class="checkbox">
-                                                    <label>
-                                                        <input type="checkbox"> I agree to the <a href="#">terms and conditions</a>
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <div class="offset-sm-2 col-sm-10">
-                                                <button type="submit" class="btn btn-danger">Submit</button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
+                                @endif
                                 <!-- /.tab-pane -->
                             </div>
                             <!-- /.tab-content -->
@@ -356,17 +245,137 @@
         </div><!-- /.container-fluid -->
     </section>
 
+    @if(auth()->user()->can('add prayer request') && auth()->user()->id === $user->id)
+        <div class="modal fade prayer-modal" id="add-prayer-request">
+            <div class="modal-dialog">
+                <form id="add-prayer-request-form" class="form-submit">
+                    @csrf
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Add Prayer Request</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group request">
+                                <label for="request">Request</label><span class="required">*</span>
+                                <textarea name="request" class="form-control" id="request" maxlength="1000"></textarea>
+                            </div>
+                            <div class="form-group visibility">
+                                <label for="visibility">Visibility</label><span class="required">*</span>
+                                <select name="visibility" class="form-control" id="visibility">
+                                    <option value="private">Private</option>
+                                    <option value="public">Public</option>
+                                </select>
+                            </div>
+                            <div class="form-group recurring">
+                                <input type="checkbox" name="recurring" class="form-control" id="recurring"> Recurring
+                            </div>
+                            <div class="form-group target_completion">
+                                <label for="target_completion">Target Completion</label>
+                                <input type="date" name="target_completion" class="form-control" id="target_completion">
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary save">Save</button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </form>
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+    @endif
+
+    @can('view prayer request')
+        <div class="modal fade " id="view-prayer-request">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Prayer Request Details</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-bordered">
+                            <tr>
+                                <td width="30%">Date Requested</td>
+                                <td id="date-requested"></td>
+                            </tr>
+                            <tr>
+                                <td>Requester</td>
+                                <td id="requester"></td>
+                            </tr>
+                            <tr>
+                                <td>Visibility</td>
+                                <td id="visibility"></td>
+                            </tr>
+                            <tr>
+                                <td>Status</td>
+                                <td id="status"></td>
+                            </tr>
+                            <tr>
+                                <td>Expected Date</td>
+                                <td id="expected-date"></td>
+                            </tr>
+                            <tr>
+                                <td>Recurring</td>
+                                <td id="recurring"></td>
+                            </tr>
+                            <tr>
+                                <td>Details</td>
+                                <td id="details"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary add-to-prayer-list">Add to prayer list</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+    @endcan
+
 @stop
 @section('plugins.Datatables', true)
 @section('plugins.Select2', true)
 
 @section('css')
     <link rel="stylesheet" href="/css/admin_custom.css">
+    <style>
+        textarea[name="request"]{
+            min-height:150px;
+        }
+        input[type="date"]{
+            width:100%;
+        }
+        input[name="recurring"]{
+            width:auto;
+            height:initial;
+            display: inline-block;
+        }
+        .read-more{
+            font-size: 2pt;
+            color: red;
+            border: none;
+        }
+        .add-prayer-btn{
+            margin-bottom:20px !important;
+        }
+    </style>
 @stop
 
 @section('js')
     <script src="{{asset('js/errorDisplay.js')}}"></script>
     <script src="{{asset('js/errorChecker.js')}}"></script>
+    <script src="{{asset('vendor/inputmask/jquery.inputmask.min.js')}}"></script>
     <script>
         let prayerModal = $('.prayer-modal');
         let Toast = Swal.mixin({
@@ -380,9 +389,8 @@
             $('#prayer-requests').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '/all-prayer-request',
+                ajax: '/user-prayer-request/{{$user->id}}',
                 columns: [
-                    { data: 'requester', name: 'requester'},
                     { data: 'created_at', name: 'created_at'},
                     { data: 'request', name: 'request'},
                     { data: 'visibility', name: 'visibility'},
@@ -396,6 +404,272 @@
                 order:[0,'asc']
             });
         });
+
+        $('[data-mask]').inputmask()
+
+        @if(auth()->user()->can('add prayer request') && auth()->user()->id === $user->id)
+
+        $('#recurring').bind('change', function () {
+
+            if ($(this).is(':checked'))
+                $('input[name="target_completion"]').attr('disabled',true);
+            else
+                $('input[name="target_completion"]').attr('disabled',false);
+        });
+
+        $(document).on('click','.add-prayer-btn',function(){
+
+            prayerModal.find('.modal-title').text('Add Prayer Request');
+            prayerModal.find('.text-danger').remove();
+
+            prayerModal.find('textarea[name="request"]').text("");
+            prayerModal.find('.form-submit').trigger('reset');
+            prayerModal.find('input[name="target_completion"]').attr('disabled',false);
+            prayerModal.find('.form-submit').removeAttr('id').attr('id','add-prayer-request-form');
+        });
+
+        $(document).on('submit','#add-prayer-request-form',function(form){
+            form.preventDefault();
+            let data = $(this).serializeArray();
+
+            $.ajax({
+                url: '/prayer-requests',
+                type: 'POST',
+                data: data,
+                beforeSend: function (){
+
+                },success: function(response){
+                    console.log(response);
+                    errorDisplay(response)
+
+                    if(response.success === true)
+                    {
+                        let table = $('#prayer-requests').DataTable();
+                        table.ajax.reload(null, false);
+                        Toast.fire({
+                            type: 'success',
+                            title: response.message
+                        });
+                        prayerModal.find('.form-submit').trigger('reset');
+                        prayerModal.find('input[name="target_completion"]').attr('disabled',false);
+                    }
+                },error: function(xhr, status, error){
+                    console.log(xhr);
+                }
+            });
+            clear_errors('request','visibility');
+        });
+        @endif
+
+        @if(auth()->user()->can('edit prayer request') && auth()->user()->id === $user->id)
+        let requestId;
+        $(document).on('click','.edit-prayer-request-btn',function(){
+            requestId = this.id;
+
+            prayerModal.find('.modal-title').text('Edit Prayer Request');
+            prayerModal.find('.text-danger').remove();
+
+            prayerModal.find('.form-submit').removeAttr('id').attr('id','edit-prayer-request-form');
+            $.ajax({
+                url: '/prayer-requests/'+requestId,
+                type: 'GET',
+                beforeSend: function(){
+
+                },success: function(response){
+
+                    if(response.recurring == true)
+                    {
+                        prayerModal.find('input[name="recurring"]').prop('checked',true);
+                        prayerModal.find('input[name="target_completion"]').attr('disabled',true);
+                    }else{
+                        prayerModal.find('input[name="recurring"]').prop('checked',false);
+                        prayerModal.find('input[name="target_completion"]').attr('disabled',false);
+                    }
+                    prayerModal.find('textarea[name="request"]').text(response.request);
+                    prayerModal.find('select[name="visibility"]').val(response.visibility).trigger('change');
+                    prayerModal.find('input[name="target_completion"]').val(response.target_completion);
+                    prayerModal.modal('toggle');
+
+                },error: function(xhr, status, error){
+                    console.log(xhr);
+                }
+            });
+        });
+        $(document).on('submit','#edit-prayer-request-form',function(form){
+            form.preventDefault();
+            let data = $(this).serializeArray();
+
+            $.ajax({
+                url: '/prayer-requests/'+requestId,
+                type: 'PUT',
+                data: data,
+                beforeSend: function(){
+
+                },success: function(response){
+                    // console.log(response);
+                    if(response.success === true)
+                    {
+                        let table = $('#prayer-requests').DataTable();
+                        table.ajax.reload(null, false);
+                        Toast.fire({
+                            type: 'success',
+                            title: response.message
+                        });
+                    }else if(response.success === false)
+                    {
+                        Toast.fire({
+                            type: 'warning',
+                            title: response.message
+                        });
+                    }
+                },error: function(xhr, status, error){
+                    console.log(xhr);
+                }
+            });
+        });
+        @endif
+
+        @if(auth()->user()->can('delete prayer request') && auth()->user()->id === $user->id)
+        $(document).on('click','.delete-prayer-request-btn',function(){
+            requestId = this.id;
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.value === true) {
+                    $.ajax({
+                        url: '/prayer-requests/'+requestId,
+                        type: 'DELETE',
+                        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                        success: function(response){
+                            console.log(response);
+                            if(response.success === true)
+                            {
+                                let table = $('#prayer-requests').DataTable();
+                                table.ajax.reload(null, false);
+                                Swal.fire(
+                                    'Removed!',
+                                    response.message,
+                                    'success'
+                                )
+                            }
+                        },error: function(xhr, status, error){
+                            console.log(xhr);
+                        }
+                    });
+
+                }
+            })
+        });
+        @endif
+
+        let viewPrayerModal = $('#view-prayer-request');
+        @can('view prayer request')
+
+        $(document).on('click','.view-prayer-request-btn',function(){
+            requestId = this.id;
+
+            $.ajax({
+                url: '/prayer-request-details/'+requestId,
+                type: 'GET',
+                beforeSend: function(){
+
+                },success: function(response){
+                    viewPrayerModal.find('table #date-requested').text(response.date_requested);
+                    viewPrayerModal.find('table #requester').text(response.fullname);
+                    viewPrayerModal.find('table #visibility').text(response.visibility);
+                    viewPrayerModal.find('table #status').text(response.visibility);
+                    viewPrayerModal.find('table #status').text(response.status);
+                    viewPrayerModal.find('table #expected-date').text(response.expected_date);
+                    viewPrayerModal.find('table #recurring').text(response.recurring_status);
+                    viewPrayerModal.find('table #details').text(response.request);
+
+
+                    if(response.add_to_list === true && response.existing_from_list === 0)
+                    {
+                        viewPrayerModal.find('.add-to-prayer-list').removeAttr('id').attr({id: requestId, disabled: false}).text('Add to prayer list').removeClass('btn-warning remove-list').addClass('btn-primary');
+                        viewPrayerModal.find('.add-to-prayer-list').attr({id: requestId, disabled: false});
+                    }else{
+                        viewPrayerModal.find('.add-to-prayer-list').removeAttr('id').attr('disabled',true).text('Add to prayer list').removeClass('btn-warning remove-list').addClass('btn-primary');
+                    }
+
+                    if(response.existing_from_list === 1)
+                    {
+                        // viewPrayerModal.find('.add-to-prayer-list').text('Added').removeClass('btn-primary').addClass('btn-success').attr('disabled',true);
+                        viewPrayerModal.find('.add-to-prayer-list').text('Remove from list').removeClass('btn-primary').addClass('btn-warning remove-list').attr({id: requestId, disabled: false});
+                    }
+
+
+                },error: function(xhr, status, error){
+                    console.log(xhr);
+                }
+            });
+        });
+        @endcan
+
+        @can('add prayer list')
+        let prayer_list_id;
+        $(document).on('click','.add-to-prayer-list', function(){
+            prayer_list_id = this.id;
+            if($(this).hasClass('remove-list')){
+                $.ajax({
+                    url: '/prayer-lists/'+prayer_list_id,
+                    type: 'DELETE',
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    beforeSend: function(){
+
+                    },success: function(response){
+                        console.log(response);
+
+                        if(response.success === true)
+                        {
+                            let table = $('#prayer-requests').DataTable();
+                            table.ajax.reload(null, false);
+                            Toast.fire({
+                                type: 'success',
+                                title: response.message
+                            });
+                            viewPrayerModal.modal('toggle');
+                        }
+                    },error: function(xhr, status, error){
+                        console.log(xhr);
+                    }
+                });
+            }else{
+
+                $.ajax({
+                    url: '/prayer-lists/',
+                    type: 'POST',
+                    data: {'id' : prayer_list_id},
+                    headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                    beforeSend: function(){
+                        viewPrayerModal.find('.add-to-prayer-list').attr('disabled',true).text('Adding...');
+                    },success: function(response){
+                        console.log(response);
+                        if(response.success === true)
+                        {
+                            let table = $('#prayer-requests').DataTable();
+                            table.ajax.reload(null, false);
+                            Toast.fire({
+                                type: 'success',
+                                title: response.message
+                            });
+                            viewPrayerModal.find('.add-to-prayer-list').text('Remove from list').removeClass('btn-primary').addClass('btn-warning remove-list').attr({id: prayer_list_id, disabled: false});
+                        }
+                    },error: function(xhr, status, error){
+                        console.log(xhr);
+                    }
+                });
+
+            }
+        });
+        @endcan
 
     </script>
 @stop
