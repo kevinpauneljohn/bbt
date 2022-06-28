@@ -171,6 +171,7 @@
 @section('js')
     <script src="{{asset('js/errorDisplay.js')}}"></script>
     <script src="{{asset('js/errorChecker.js')}}"></script>
+    <script src="{{asset('js/prayer.js')}}"></script>
     <script>
         let prayerModal = $('.prayer-modal');
         let Toast = Swal.mixin({

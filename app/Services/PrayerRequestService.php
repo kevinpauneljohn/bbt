@@ -54,6 +54,10 @@ class PrayerRequestService
             })
             ->addColumn('action', function($request){
                 $action = '';
+                if($request->user_id === auth()->user()->id)
+                {
+                    $action .= '<button class="btn btn-xs btn-warning mark-answered-btn" id="'.$request->id.'" title="Mark as answered"><i class="fa fa-praying-hands"></i></button>';
+                }
                 if(auth()->user()->can('view prayer request'))
                 {
                     $action .= '<button href="#" class="btn btn-xs btn-success view-prayer-request-btn" id="'.$request->id.'" data-toggle="modal" data-target="#view-prayer-request" title="View"><i class="fa fa-eye"></i></button> ';
@@ -66,10 +70,14 @@ class PrayerRequestService
                 {
                     $action .= '<button class="btn btn-xs btn-danger delete-prayer-request-btn" id="'.$request->id.'" title="Delete"><i class="fa fa-trash"></i></button>';
                 }
+
                 return $action;
             })
             ->setRowClass(function($request){
                 return PrayerList::where('user_id',auth()->user()->id)->where('prayer_request_id',$request->id)->count() > 0 ? 'added' : 'not-added';
+            })
+            ->setRowClass(function($request){
+                return PrayerRequest::where('id',$request->id)->where('date_completed','!=',null)->count() > 0 ? 'completed' : 'not-completed';
             })
             ->rawColumns(['action','status','visibility','request','requester'])
             ->make(true);

@@ -197,4 +197,22 @@ class PrayerRequestController extends Controller
         }
 
     }
+
+    /**
+     * mark the prayer request as answered only by the owner of the prayer
+     * @param $prayer_id
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function answered_prayer($prayer_id): \Illuminate\Http\JsonResponse
+    {
+        $prayer = PrayerRequest::find($prayer_id);
+        if(auth()->user()->id === $prayer->user_id){
+            $prayer->date_completed = now();
+            if($prayer->save())
+            {
+                return response()->json(['success' => true, 'message' => 'Prayer marked answered!']);
+            }
+        }
+        return response()->json(['success' => false, 'message' => 'An error occurred']);
+    }
 }

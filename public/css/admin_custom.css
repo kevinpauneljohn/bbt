@@ -1,6 +1,10 @@
 .added{
     background-color:#d7fbd2;
 }
+
+.completed{
+    background-color:#c7f7fd;
+}
 .required{
     color:red;
 }
