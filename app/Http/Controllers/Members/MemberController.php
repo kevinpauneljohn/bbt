@@ -17,4 +17,9 @@ class MemberController extends Controller
         $user = User::find($member);
         return view('dashboard.members.profile',compact('user'));
     }
+
+    public function my_profile()
+    {
+        return $this->member_profile(auth()->user()->id);
+    }
 }

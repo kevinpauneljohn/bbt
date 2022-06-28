@@ -22,9 +22,11 @@ return new class extends Migration
             $table->string('username')->unique();
             $table->string('mobile_number')->unique();
             $table->date('date_of_birth')->nullable();
+            $table->date('date_saved')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->unsignedBigInteger('church')->nullable();
+            $table->text('life_verse')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

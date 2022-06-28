@@ -29,8 +29,10 @@ class User extends Authenticatable
         'username',
         'mobile_number',
         'date_of_birth',
+        'date_saved',
         'password',
         'church',
+        'life_verse',
     ];
 
     /**

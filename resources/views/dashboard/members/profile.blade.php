@@ -37,20 +37,20 @@
                                 @endforeach
                             </p>
 
-                            <ul class="list-group list-group-unbordered mb-3">
-                                <li class="list-group-item">
-                                    <b>Date Saved</b> <a class="float-right">01/06/2006</a>
-                                </li>
-                                <li class="list-group-item">
-                                    <b>Date Of Birth</b> <a class="float-right">01/06/2006</a>
-                                </li>
-                                <li class="list-group-item">
-                                    <b>Mobile Number</b> <a class="float-right">{{$user->mobile_number}}</a>
-                                </li>
-                                <li class="list-group-item">
-                                    <b>Email</b> <a class="float-right">{{$user->email}}</a>
-                                </li>
-                            </ul>
+{{--                            <ul class="list-group list-group-unbordered mb-3">--}}
+{{--                                <li class="list-group-item">--}}
+{{--                                    <b>Date Saved</b> <a class="float-right">01/06/2006</a>--}}
+{{--                                </li>--}}
+{{--                                <li class="list-group-item">--}}
+{{--                                    <b>Date Of Birth</b> <a class="float-right">01/06/2006</a>--}}
+{{--                                </li>--}}
+{{--                                <li class="list-group-item">--}}
+{{--                                    <b>Mobile Number</b> <a class="float-right">{{$user->mobile_number}}</a>--}}
+{{--                                </li>--}}
+{{--                                <li class="list-group-item">--}}
+{{--                                    <b>Email</b> <a class="float-right">{{$user->email}}</a>--}}
+{{--                                </li>--}}
+{{--                            </ul>--}}
                         </div>
                         <!-- /.card-body -->
                     </div>
@@ -63,14 +63,54 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
-                            <strong><i class="fas fa-book mr-1"></i> Life Verse</strong>
+                            @if($user->date_saved !== null)
+                                <strong><i class="fas fa-cross mr-1"></i> Date Saved</strong>
 
-                            <p class="text-muted">
-                                Proverbs 3:5-6<br/>
-                                Trust in the Lord with all thine heart; and lean not unto thine own understanding.<br/>
+                                <p class="text-muted">
+                                    {{$user->date_saved}}
+                                </p>
+                                <hr/>
+                            @endif
 
-                                In all thy ways acknowledge him, and he shall direct thy paths.
-                            </p>
+                            @if($user->date_of_birth !== null)
+                                    <strong><i class="fas fa-birthday-cake mr-1"></i> Date Of Birth</strong>
+
+                                    <p class="text-muted">
+                                        {{$user->date_of_birth}}
+                                    </p>
+                                    <hr/>
+                            @endif
+
+                            @if($user->mobile_numner !== null)
+                                    <strong><i class="fas fa-mobile mr-1"></i> Mobile Number</strong>
+
+                                    <p class="text-muted">
+                                        {{$user->mobile_numner}}
+                                    </p>
+                                    <hr/>
+                            @endif
+
+                            @if($user->email !== null)
+                                    <strong><i class="fas fa-mail-bulk mr-1"></i> Email</strong>
+
+                                    <p class="text-muted">
+                                        {{$user->email}}
+                                    </p>
+                                    <hr/>
+                            @endif
+
+                            @if($user->life_verse !== null)
+                                <strong><i class="fas fa-book mr-1"></i> Life Verse</strong>
+
+                                <p class="text-muted">
+                                    Proverbs 3:5-6<br/>
+                                    Trust in the Lord with all thine heart; and lean not unto thine own understanding.<br/>
+
+                                    In all thy ways acknowledge him, and he shall direct thy paths.
+                                </p>
+                            @endif
+
+
 
                         </div>
                         <!-- /.card-body -->
@@ -119,19 +159,19 @@
                                             <div class="form-group row firstname">
                                                 <label for="firstname" class="col-sm-2 col-form-label">First Name</label>
                                                 <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="firstname" placeholder="First Name">
+                                                    <input name="firstname" type="text" class="form-control" id="firstname" placeholder="First Name">
                                                 </div>
                                             </div>
                                             <div class="form-group row middlename">
                                                 <label for="middlename" class="col-sm-2 col-form-label">Middle Name</label>
                                                 <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="middlename" placeholder="Middle Name">
+                                                    <input name="middlename" type="text" class="form-control" id="middlename" placeholder="Middle Name">
                                                 </div>
                                             </div>
                                             <div class="form-group row lastname">
                                                 <label for="lastname" class="col-sm-2 col-form-label">Last Name</label>
                                                 <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="lastname" placeholder="Last Name">
+                                                    <input name="lastname" type="text" class="form-control" id="lastname" placeholder="Last Name">
                                                 </div>
                                             </div>
 
@@ -140,13 +180,13 @@
                                             <div class="form-group row date_saved">
                                                 <label for="date_saved" class="col-sm-2 col-form-label">Date Saved</label>
                                                 <div class="col-sm-10">
-                                                    <input type="date" class="form-control" id="date_saved">
+                                                    <input name="date_saved" type="date" class="form-control" id="date_saved">
                                                 </div>
                                             </div>
                                             <div class="form-group row date_of_birth">
                                                 <label for="date_of_birth" class="col-sm-2 col-form-label">Date Of Birth</label>
                                                 <div class="col-sm-10">
-                                                    <input type="date" class="form-control" id="date_of_birth">
+                                                    <input name="date_of_birth" type="date" class="form-control" id="date_of_birth">
                                                 </div>
                                             </div>
                                             <div class="form-group row mobile_number">
@@ -156,24 +196,15 @@
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text"><i class="fas fa-phone"></i></span>
                                                         </div>
-                                                        <input type="text" class="form-control" id="mobile_number" data-inputmask='"mask": "(+63) 999-9999-999"' data-mask>
+                                                        <input name="mobile_number" type="text" class="form-control" id="mobile_number" data-inputmask='"mask": "(+63) 999-9999-999"' data-mask>
                                                     </div>
                                                 </div>
 
                                             </div>
-                                            <div class="form-group row">
-                                                <label for="inputSkills" class="col-sm-2 col-form-label">Skills</label>
+                                            <div class="form-group row life_verse">
+                                                <label for="life_verse" class="col-sm-2 col-form-label">Life Verse</label>
                                                 <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="inputSkills" placeholder="Skills">
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <div class="offset-sm-2 col-sm-10">
-                                                    <div class="checkbox">
-                                                        <label>
-                                                            <input type="checkbox"> I agree to the <a href="#">terms and conditions</a>
-                                                        </label>
-                                                    </div>
+                                                    <textarea name="life_verse" class="form-control" id="life_verse" placeholder="Life Verse" rows="4"></textarea>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
@@ -209,10 +240,10 @@
                                                     <textarea class="form-control" id="inputExperience" placeholder="Experience"></textarea>
                                                 </div>
                                             </div>
-                                            <div class="form-group row">
-                                                <label for="inputSkills" class="col-sm-2 col-form-label">Skills</label>
+                                            <div class="form-group row life_verse">
+                                                <label for="life_verse" class="col-sm-2 col-form-label">Life Verse</label>
                                                 <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="inputSkills" placeholder="Skills">
+                                                    <textarea class="form-control" id="life_verse" placeholder="Skills"></textarea>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
@@ -346,6 +377,7 @@
 @stop
 @section('plugins.Datatables', true)
 @section('plugins.Select2', true)
+@section('plugins.inputMask', true)
 
 @section('css')
     <link rel="stylesheet" href="/css/admin_custom.css">
@@ -375,7 +407,7 @@
 @section('js')
     <script src="{{asset('js/errorDisplay.js')}}"></script>
     <script src="{{asset('js/errorChecker.js')}}"></script>
-    <script src="{{asset('vendor/inputmask/jquery.inputmask.min.js')}}"></script>
+
     <script>
         let prayerModal = $('.prayer-modal');
         let Toast = Swal.mixin({

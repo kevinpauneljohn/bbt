@@ -20,6 +20,10 @@ class MembersOnly
     {
         $member = User::find($request->member);
 
+        if($member === null)
+        {
+            return abort(404);
+        }
         if(auth()->user()->church !== $member->church)
         {
             return abort(404);
