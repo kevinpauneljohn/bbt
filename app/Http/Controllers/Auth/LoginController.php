@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class LoginController extends Controller
 {
@@ -20,6 +23,8 @@ class LoginController extends Controller
     */
 
     use AuthenticatesUsers;
+
+    protected $username;
 
     /**
      * Where to redirect users after login.
@@ -37,4 +42,56 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
+    protected function authenticated(Request $request, $user)
+    {
+        return redirect(route('dashboard'));
+    }
+
+    /**
+     * @param Request $request
+     */
+    public function login(Request $request)
+    {
+        $validation = Validator::make($request->all(),[
+            'login' => 'required',
+            'password' => 'required'
+        ]);
+
+        if($validation->passes())
+        {
+            if($this->findUsername() === 'email')
+            {
+                if(Auth::attempt(['email' => $request->login,'password' => $request->password])){
+                    $request->session()->regenerate();
+                    return redirect(route('home'));
+                }
+                return back()->withErrors(['success' => 'test']);
+            }else if($this->findUsername() === 'username'){
+                if(Auth::attempt(['username' => $request->login,'password' => $request->password])){
+                    $request->session()->regenerate();
+                    return redirect(route('home'));
+                }
+                return back()->withErrors(['success' => 'test']);
+            }
+        }
+
+
+        return back()->withErrors($validation->errors());
+    }
+
+    /**
+     * @return string
+     */
+    public function findUsername(): string
+    {
+        $login = request()->input('login');
+
+        $fieldType = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+
+        request()->merge([$fieldType => $login]);
+
+        return $fieldType;
+    }
+
 }
